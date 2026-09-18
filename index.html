@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F8FAFC] text-slate-900 antialiased selection:bg-slate-900 selection:text-white">
+<html lang="en" class="h-full antialiased selection:bg-slate-900 selection:text-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,12 @@
             theme: {
                 extend: {
                     colors: {
-                        canvasBg: '#F8FAFC',
-                        surfaceWhite: '#FFFFFF',
-                        borderSubtle: 'rgba(15, 23, 42, 0.08)',
-                        charcoal: '#0F172A',
-                        slateMuted: '#64748B',
+                        paperBg: '#FBF9F5',
+                        paperCard: '#FFFFFF',
+                        paperBorder: 'rgba(30, 27, 22, 0.08)',
+                        charcoal: '#1E1B16',
+                        slateMuted: '#78716C',
                         emeraldAccent: '#059669',
-                        emeraldGlow: 'rgba(5, 150, 105, 0.15)',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'sans-serif'],
@@ -28,53 +27,70 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .apple-shadow { box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 1px 1px rgba(15, 23, 42, 0.05); }
-        .ring-glow { filter: drop-shadow(0 10px 25px rgba(5, 150, 105, 0.2)); }
-        .subtle-grid {
-            background-image: radial-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+        body {
+            background-color: #FBF9F5;
+            background-image: radial-gradient(rgba(30, 27, 22, 0.06) 1px, transparent 1px);
             background-size: 24px 24px;
         }
+        .paper-shadow { 
+            box-shadow: 0 12px 32px -10px rgba(30, 27, 22, 0.06), 0 0 1px 1px rgba(30, 27, 22, 0.05); 
+        }
+        .ring-glow { filter: drop-shadow(0 10px 20px rgba(5, 150, 105, 0.2)); }
     </style>
 </head>
-<body class="h-screen w-screen bg-canvasBg subtle-grid text-charcoal font-sans flex flex-col justify-between overflow-hidden relative p-6 md:p-10">
+<body class="h-screen w-screen text-charcoal font-sans flex flex-col justify-between overflow-hidden relative p-6 md:p-10 selection:bg-charcoal selection:text-white">
 
-    <!-- TOP HEADER (Minimalist Brand & Meta) -->
+    <!-- TOP HEADER -->
     <header class="w-full max-w-6xl mx-auto flex items-center justify-between z-20">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-charcoal text-white flex items-center justify-center font-bold text-xs shadow-md">
+            <div class="w-8 h-8 rounded-xl bg-charcoal text-paperBg flex items-center justify-center font-bold text-xs shadow-md">
                 Æ
             </div>
             <span class="font-bold tracking-tight text-charcoal text-sm">AETHEL</span>
-            <span class="text-[10px] font-mono bg-slate-200/60 text-slate-600 px-2 py-0.5 rounded-full font-semibold">STUDIO</span>
+            <span class="text-[10px] font-mono bg-stone-200/70 text-stone-700 px-2 py-0.5 rounded-full font-semibold">STUDIO</span>
         </div>
 
-        <div class="flex items-center gap-4 text-xs font-mono">
-            <div class="bg-surfaceWhite border border-borderSubtle px-4 py-2 rounded-xl apple-shadow flex items-center gap-2">
-                <span class="text-slateMuted">YIELD</span>
-                <span id="userPoints" class="text-charcoal font-bold">1,250 XP</span>
-            </div>
-            <div class="bg-surfaceWhite border border-borderSubtle px-4 py-2 rounded-xl apple-shadow flex items-center gap-2">
-                <span class="text-slateMuted">STREAK</span>
-                <span class="text-emeraldAccent font-bold">12 DAYS</span>
+        <div class="flex items-center gap-3">
+            <!-- TASK DRAWER TOGGLE BUTTON -->
+            <button onclick="toggleDrawer('tasksDrawer')" class="bg-paperCard border border-paperBorder px-3.5 py-2 rounded-xl paper-shadow text-xs font-mono font-medium hover:bg-stone-50 transition flex items-center gap-2">
+                <span>📋</span>
+                <span>TASKS</span>
+                <span id="taskCountBadge" class="bg-emeraldAccent text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+            </button>
+
+            <!-- ANALYTICS DRAWER TOGGLE BUTTON -->
+            <button onclick="toggleDrawer('analyticsDrawer')" class="bg-paperCard border border-paperBorder px-3.5 py-2 rounded-xl paper-shadow text-xs font-mono font-medium hover:bg-stone-50 transition flex items-center gap-2">
+                <span>📊</span>
+                <span>STATS</span>
+            </button>
+
+            <div class="hidden sm:flex items-center gap-3 text-xs font-mono ml-2">
+                <div class="bg-paperCard border border-paperBorder px-4 py-2 rounded-xl paper-shadow flex items-center gap-2">
+                    <span class="text-slateMuted">YIELD</span>
+                    <span id="userPoints" class="text-charcoal font-bold">1,250 XP</span>
+                </div>
+                <div class="bg-paperCard border border-paperBorder px-4 py-2 rounded-xl paper-shadow flex items-center gap-2">
+                    <span class="text-slateMuted">STREAK</span>
+                    <span class="text-emeraldAccent font-bold">12 DAYS</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- CENTERPIECE: ARCHITECTURAL CLOCK CANVAS -->
+    <!-- CENTERPIECE: CIRCULAR CLOCK ENGINE -->
     <main class="my-auto flex flex-col items-center justify-center relative z-10">
         
-        <!-- MAIN CIRCULAR ENGINE -->
         <div class="relative flex items-center justify-center cursor-pointer group" onclick="toggleSession()">
             
-            <!-- SVG RING (Precision Mathematical Centering) -->
+            <!-- SVG RING -->
             <svg class="w-[340px] h-[340px] md:w-[420px] md:h-[420px] transform -rotate-90 overflow-visible transition-all duration-700" id="svgGauge">
-                <circle cx="50%" cy="50%" r="42%" stroke="#E2E8F0" stroke-width="6" fill="transparent" />
+                <circle cx="50%" cy="50%" r="42%" stroke="#E7E2D9" stroke-width="6" fill="transparent" />
                 <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#059669" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="ring-glow transition-all duration-1000 ease-linear" />
             </svg>
 
             <!-- PERFECTLY CENTERED READOUT -->
             <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                <div id="targetDisplay" class="text-[11px] font-mono tracking-wider text-slateMuted bg-slate-100 border border-slate-200/80 px-3.5 py-1 rounded-full uppercase mb-3 max-w-[220px] truncate shadow-sm">
+                <div id="targetDisplay" class="text-[11px] font-mono tracking-wider text-slateMuted bg-stone-200/60 border border-stone-300/60 px-3.5 py-1 rounded-full uppercase mb-3 max-w-[220px] truncate shadow-sm">
                     INTENTION IDLE
                 </div>
                 <div id="timeReadout" class="text-6xl md:text-7xl font-mono font-bold tracking-tight text-charcoal">
@@ -90,40 +106,101 @@
 
     </main>
 
-    <!-- FLOATING ARCHITECTURAL CONTROL DOCK -->
+    <!-- FLOATING DOCK ISLANDS -->
     <footer class="w-full max-w-4xl mx-auto z-20 flex flex-col md:flex-row items-center justify-between gap-4">
         
         <!-- OBJECTIVE INPUT FIELD -->
-        <div class="bg-surfaceWhite border border-borderSubtle rounded-2xl p-2.5 w-full md:w-80 apple-shadow flex items-center gap-2">
-            <span class="pl-2 text-slate-400 text-xs">🎯</span>
-            <input id="primaryTarget" type="text" placeholder="State non-negotiable target..." class="w-full bg-transparent text-xs text-charcoal placeholder-slate-400 focus:outline-none font-medium">
+        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2.5 w-full md:w-80 paper-shadow flex items-center gap-2">
+            <span class="pl-2 text-stone-400 text-xs">🎯</span>
+            <input id="primaryTarget" type="text" placeholder="State non-negotiable target..." class="w-full bg-transparent text-xs text-charcoal placeholder-stone-400 focus:outline-none font-medium">
         </div>
 
         <!-- DURATION & ACTION DOCK -->
-        <div class="bg-surfaceWhite border border-borderSubtle rounded-2xl p-2 apple-shadow flex items-center gap-3">
+        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2 paper-shadow flex items-center gap-3">
             <div class="flex gap-1 font-mono text-xs">
-                <button onclick="setMins(5)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-slate-50 transition">05M</button>
-                <button onclick="setMins(15)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-slate-50 transition">15M</button>
-                <button onclick="setMins(25)" class="dur-btn px-3 py-2 rounded-xl bg-charcoal text-white font-bold transition shadow-sm">25M</button>
-                <button onclick="setMins(45)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-slate-50 transition">45M</button>
+                <button onclick="setMins(5)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">05M</button>
+                <button onclick="setMins(15)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">15M</button>
+                <button onclick="setMins(25)" class="dur-btn px-3 py-2 rounded-xl bg-charcoal text-paperBg font-bold transition shadow-sm">25M</button>
+                <button onclick="setMins(45)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">45M</button>
             </div>
-            <div class="h-5 w-[1px] bg-slate-200"></div>
+            <div class="h-5 w-[1px] bg-stone-200"></div>
             <button id="actionBtn" onclick="toggleSession()" class="bg-emeraldAccent hover:bg-emerald-700 text-white font-mono font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md shadow-emeraldAccent/20">
                 INITIATE
             </button>
         </div>
 
-        <!-- AUDITORY MASKING CONTROLS -->
-        <div class="bg-surfaceWhite border border-borderSubtle rounded-2xl p-2 apple-shadow flex items-center gap-2 font-mono text-xs">
+        <!-- AUDITORY ENGINE CONTROLS -->
+        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2 paper-shadow flex items-center gap-2 font-mono text-xs">
             <span class="text-[10px] text-slateMuted pl-2">SOUND:</span>
-            <button id="sndOff" onclick="setSound('none')" class="snd-btn bg-slate-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-slate-200">OFF</button>
+            <button id="sndOff" onclick="setSound('none')" class="snd-btn bg-stone-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-stone-200">OFF</button>
             <button id="sndBeta" onclick="setSound('binaural')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">16Hz BETA</button>
             <button id="sndPink" onclick="setSound('pink')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">PINK</button>
+            <button id="sndRain" onclick="setSound('rain')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">RAIN</button>
         </div>
 
     </footer>
 
-    <!-- ENGINE LOGIC -->
+    <!-- SLIDE-OVER DRAWER 1: FOCUS TASKS / TO-DO ENGINE -->
+    <aside id="tasksDrawer" class="fixed top-0 left-0 h-full w-80 md:w-96 bg-paperCard border-r border-paperBorder shadow-2xl z-30 transform -translate-x-full transition-transform duration-300 flex flex-col p-6">
+        <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-sm tracking-tight">FOCUS TASK STACK</span>
+                <span class="text-[10px] font-mono bg-stone-100 px-2 py-0.5 rounded-full text-slateMuted font-semibold">LIVE</span>
+            </div>
+            <button onclick="toggleDrawer('tasksDrawer')" class="text-stone-400 hover:text-charcoal font-bold text-sm">✕</button>
+        </div>
+
+        <!-- TASK INPUT -->
+        <div class="mt-4 flex gap-2">
+            <input id="newTaskInput" type="text" placeholder="Add actionable task..." class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-charcoal font-medium">
+            <button onclick="addTask()" class="bg-charcoal text-paperBg px-4 py-2 rounded-xl font-mono text-xs font-bold hover:bg-black transition">+</button>
+        </div>
+
+        <!-- TASK LIST CONTAINER -->
+        <div id="taskList" class="mt-4 flex-1 overflow-y-auto flex flex-col gap-2 pr-1">
+            <!-- Dynamic Tasks Render Here -->
+        </div>
+    </aside>
+
+    <!-- SLIDE-OVER DRAWER 2: FOCUS ANALYTICS & HISTORY -->
+    <aside id="analyticsDrawer" class="fixed top-0 right-0 h-full w-80 md:w-96 bg-paperCard border-l border-paperBorder shadow-2xl z-30 transform translate-x-full transition-transform duration-300 flex flex-col p-6">
+        <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+            <span class="font-bold text-sm tracking-tight">SESSION ANALYTICS</span>
+            <button onclick="toggleDrawer('analyticsDrawer')" class="text-stone-400 hover:text-charcoal font-bold text-sm">✕</button>
+        </div>
+
+        <div class="mt-6 space-y-4">
+            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
+                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider">Daily Focus Progress</div>
+                <div class="text-2xl font-bold font-mono text-charcoal mt-1">3.5 / 5.0 <span class="text-xs text-slateMuted">HRS</span></div>
+                <div class="w-full bg-stone-200 h-2 rounded-full mt-3 overflow-hidden">
+                    <div class="bg-emeraldAccent h-full rounded-full" style="width: 70%"></div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
+                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider">Deep Focus Index</div>
+                <div class="text-2xl font-bold font-mono text-emeraldAccent mt-1">98.4%</div>
+                <div class="text-[11px] text-slateMuted mt-1">Calculated via continuous session integrity.</div>
+            </div>
+
+            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
+                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider mb-2">Completed Sessions Today</div>
+                <div id="sessionHistory" class="space-y-2 text-xs font-mono">
+                    <div class="flex justify-between items-center text-slateMuted border-b border-stone-200/60 pb-1">
+                        <span>• 25m Biology Revision</span>
+                        <span class="text-emeraldAccent">+250 XP</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slateMuted border-b border-stone-200/60 pb-1">
+                        <span>• 45m UI Architecture</span>
+                        <span class="text-emeraldAccent">+450 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- JAVASCRIPT ENGINE -->
     <script>
         let duration = 25 * 60;
         let timeRemaining = duration;
@@ -132,6 +209,7 @@
         let audioCtx = null;
         let activeNodes = [];
         let soundMode = 'none';
+        let tasks = [];
 
         const timeReadout = document.getElementById('timeReadout');
         const timerProgress = document.getElementById('timerProgress');
@@ -140,19 +218,32 @@
         const actionBtn = document.getElementById('actionBtn');
         const targetDisplay = document.getElementById('targetDisplay');
 
+        function toggleDrawer(id) {
+            const drawer = document.getElementById(id);
+            if (id === 'tasksDrawer') {
+                drawer.classList.toggle('-translate-x-full');
+            } else {
+                drawer.classList.toggle('translate-x-full');
+            }
+        }
+
         function setMins(m) {
             if (isRunning) return;
             duration = m * 60;
             timeRemaining = duration;
-            document.querySelectorAll('.dur-btn').forEach(b => b.className = "dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-slate-50 transition");
-            event.currentTarget.className = "dur-btn px-3 py-2 rounded-xl bg-charcoal text-white font-bold transition shadow-sm";
+            document.querySelectorAll('.dur-btn').forEach(b => b.className = "dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition");
+            event.currentTarget.className = "dur-btn px-3 py-2 rounded-xl bg-charcoal text-paperBg font-bold transition shadow-sm";
             updateGauge();
         }
 
         function setSound(mode) {
             soundMode = mode;
             document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg");
-            event.currentTarget.className = "snd-btn bg-slate-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-slate-200";
+            event.currentTarget.className = "snd-btn bg-stone-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-stone-200";
+            if (isRunning) {
+                stopAudio();
+                startAudio();
+            }
         }
 
         function updateGauge() {
@@ -204,19 +295,95 @@
             statusText.innerText = "READY TO ENGAGE";
             statusPulse.className = "w-2 h-2 rounded-full bg-emeraldAccent";
 
+            if (completed) {
+                let current = parseInt(document.getElementById('userPoints').innerText);
+                document.getElementById('userPoints').innerText = (current + (duration / 60) * 10) + ' XP';
+            }
+
             timeRemaining = duration;
             updateGauge();
         }
 
+        // TASK STACK ENGINE
+        function addTask() {
+            const input = document.getElementById('newTaskInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            tasks.push({ id: Date.now(), text: text, done: false });
+            input.value = '';
+            renderTasks();
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+            
+            const pendingTasks = tasks.filter(t => !t.done).length;
+            document.getElementById('taskCountBadge').innerText = pendingTasks;
+
+            tasks.forEach(task => {
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-xl border transition flex items-center justify-between gap-2 text-xs font-medium ${task.done ? 'bg-stone-100 border-stone-200 text-stone-400 line-through' : 'bg-stone-50 border-stone-200 text-charcoal'}`;
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 cursor-pointer flex-1" onclick="toggleTask(${task.id})">
+                        <span>${task.done ? '✓' : '○'}</span>
+                        <span class="truncate">${task.text}</span>
+                    </div>
+                    <button onclick="deleteTask(${task.id})" class="text-stone-400 hover:text-red-500 font-bold px-1">✕</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // AUDIO ENGINE
         function startAudio() {
             if (soundMode === 'none') return;
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
             if (soundMode === 'binaural') {
                 let m = audioCtx.createChannelMerger(2);
                 let o1 = audioCtx.createOscillator(); o1.frequency.value = 400; o1.connect(m, 0, 0);
                 let o2 = audioCtx.createOscillator(); o2.frequency.value = 416; o2.connect(m, 0, 1);
                 m.connect(audioCtx.destination); o1.start(); o2.start();
                 activeNodes = [o1, o2];
+            } else if (soundMode === 'pink' || soundMode === 'rain') {
+                let bufferSize = audioCtx.sampleRate * 2;
+                let noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                let output = noiseBuffer.getChannelData(0);
+                let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+                for (let i = 0; i < bufferSize; i++) {
+                    let white = Math.random() * 2 - 1;
+                    b0 = 0.99886 * b0 + white * 0.0555179;
+                    b1 = 0.99332 * b1 + white * 0.0750759;
+                    b2 = 0.96900 * b2 + white * 0.1538520;
+                    b3 = 0.86650 * b3 + white * 0.3104856;
+                    b4 = 0.55000 * b4 + white * 0.5329522;
+                    b5 = -0.7616 * b5 - white * 0.0168980;
+                    output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                    b6 = white * 0.115926;
+                }
+                let whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+                whiteNoise.loop = true;
+                
+                let gainNode = audioCtx.createGain();
+                gainNode.gain.value = soundMode === 'rain' ? 0.08 : 0.05;
+                
+                whiteNoise.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                whiteNoise.start();
+                activeNodes = [whiteNoise];
             }
         }
 
@@ -227,6 +394,7 @@
         }
 
         updateGauge();
+        renderTasks();
     </script>
 </body>
 </html>
