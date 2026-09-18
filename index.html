@@ -1,255 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-HK">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>AETHEL — Deep Focus Protocol</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHEL — Immersive Deep Focus Command Center</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #09090B;
-      color: #F4F4F5;
+      background-color: #030712;
+      color: #f9fafb;
+      overflow-x: hidden;
     }
-    .font-serif-luxury {
-      font-family: 'Cinzel', serif;
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
     }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
+
+    /* Ambient Dynamic Background Glow */
+    .bg-radial-glow {
+      background: radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.05) 45%, rgba(3, 7, 18, 0) 70%);
     }
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+
+    /* Magic UI Glassmorphism Effect */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Shimmer Border Light Effect */
+    .shimmer-border {
+      position: relative;
+    }
+    .shimmer-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(99, 102, 241, 0.5) 50%, rgba(255,255,255,0) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: shimmerMove 4s linear infinite;
+    }
+    @keyframes shimmerMove {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Pulse Aura Animation */
+    .aura-ring {
+      box-shadow: 0 0 80px rgba(99, 102, 241, 0.25), inset 0 0 30px rgba(99, 102, 241, 0.15);
     }
   </style>
 </head>
-<body class="flex justify-center items-center min-h-screen bg-black p-0 sm:p-4">
+<body class="bg-gray-950 text-gray-100 min-h-screen relative selection:bg-indigo-500 selection:text-white">
 
-  <div id="root"></div>
+  <!-- Particle Layer Background -->
+  <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+  <div class="fixed inset-0 bg-radial-glow pointer-events-none z-0"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+  <!-- Header / Navigation Bar -->
+  <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-gray-950/60 border-b border-gray-800/50 px-8 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-extrabold text-white shadow-lg shadow-indigo-500/30">A</div>
+        <span class="text-xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">AETHEL</span>
+        <span class="text-xs uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono tracking-wider">v2.0 Pro</span>
+      </div>
 
-    function App() {
-      const [task, setTask] = useState('');
-      const [isFocusing, setIsFocusing] = useState(false);
-      const [secondsLeft, setSecondsLeft] = useState(15 * 60);
-      const [totalSeconds, setTotalSeconds] = useState(15 * 60);
-      const [showHonestyGate, setShowHonestyGate] = useState(false);
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+        <a href="#hero" class="hover:text-white transition-colors">Protocol Home</a>
+        <a href="#stats" class="hover:text-white transition-colors">Analytics</a>
+        <a href="#vault" class="hover:text-white transition-colors">Focus Vault</a>
+      </nav>
 
-      const [dopamineScore, setDopamineScore] = useState(() => {
-        try { return parseInt(localStorage.getItem('aethel_score') || '0', 10); } 
-        catch { return 0; }
-      });
-
-      const [history, setHistory] = useState(() => {
-        try { return JSON.parse(localStorage.getItem('aethel_history') || '[]'); } 
-        catch { return []; }
-      });
-
-      useEffect(() => {
-        localStorage.setItem('aethel_score', dopamineScore.toString());
-      }, [dopamineScore]);
-
-      useEffect(() => {
-        localStorage.setItem('aethel_history', JSON.stringify(history));
-      }, [history]);
-
-      useEffect(() => {
-        let interval = null;
-        if (isFocusing && secondsLeft > 0) {
-          interval = setInterval(() => {
-            setSecondsLeft((prev) => prev - 1);
-          }, 1000);
-        } else if (secondsLeft === 0 && isFocusing) {
-          completeSession(true, 'Full Cycle Completed');
-        }
-        return () => clearInterval(interval);
-      }, [isFocusing, secondsLeft]);
-
-      const startTimer = (mins) => {
-        const secs = mins * 60;
-        setTotalSeconds(secs);
-        setSecondsLeft(secs);
-        setIsFocusing(true);
-      };
-
-      const completeSession = (isFullSuccess, note) => {
-        setIsFocusing(false);
-        const earned = isFullSuccess ? 150 : 50;
-        setDopamineScore((prev) => prev + earned);
-
-        const newEntry = {
-          id: Date.now(),
-          task: task.trim() || 'Unspecified Protocol',
-          duration: Math.max(1, Math.round((totalSeconds - secondsLeft) / 60)),
-          earned,
-          note,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-
-        setHistory((prev) => [newEntry, ...prev]);
-        setShowHonestyGate(false);
-      };
-
-      const formatTime = (secs) => {
-        const m = Math.floor(secs / 60);
-        const s = secs % 60;
-        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-      };
-
-      const progress = ((totalSeconds - secondsLeft) / totalSeconds) * 100;
-
-      return (
-        <div className="w-full max-w-[390px] h-[844px] bg-[#09090B] border border-zinc-800 sm:rounded-[44px] shadow-2xl flex flex-col justify-between p-6 relative overflow-hidden hide-scrollbar">
-          
-          {/* Header */}
-          <div className="flex justify-between items-center pt-2">
-            <div>
-              <h1 className="font-serif-luxury text-xl tracking-[0.2em] text-zinc-100 font-bold uppercase">AETHEL</h1>
-              <p className="text-[10px] tracking-widest text-zinc-500 uppercase font-semibold mt-0.5">Focus Architecture</p>
-            </div>
-            <div className="bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-full flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="text-xs font-semibold text-zinc-300 tracking-wider">{dopamineScore} <span className="text-[9px] text-zinc-500">PTS</span></span>
-            </div>
-          </div>
-
-          {/* Core Focus Area */}
-          <div className="flex flex-col items-center my-auto space-y-6">
-            
-            {/* Task Input */}
-            <div className="w-full">
-              <input 
-                type="text"
-                disabled={isFocusing}
-                value={task}
-                onChange={(e) => setTask(e.target.value)}
-                placeholder="Enter single focus target..."
-                className="w-full bg-zinc-900/60 border border-zinc-800 rounded-2xl px-4 py-3 text-xs text-center text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-all disabled:opacity-50"
-              />
-            </div>
-
-            {/* Circular Timer Visual */}
-            <div className="relative w-56 h-56 flex items-center justify-center">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="42" stroke="#18181B" strokeWidth="4" fill="transparent" />
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="42" 
-                  stroke="#F4F4F5" 
-                  strokeWidth="4" 
-                  fill="transparent" 
-                  strokeDasharray={263.89}
-                  strokeDashoffset={263.89 - (263.89 * progress) / 100}
-                  className="transition-all duration-500 ease-out"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute flex flex-col items-center">
-                <span className="text-5xl font-light tracking-tight text-zinc-100 font-mono">
-                  {formatTime(secondsLeft)}
-                </span>
-                <span className="text-[9px] tracking-[0.25em] text-zinc-500 uppercase mt-2 font-medium">
-                  {isFocusing ? 'LOCK-IN ACTIVE' : 'SYSTEM IDLE'}
-                </span>
-              </div>
-            </div>
-
-            {/* Control Options */}
-            {!isFocusing ? (
-              <div className="w-full grid grid-cols-3 gap-2">
-                <button onClick={() => startTimer(5)} className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-3 rounded-2xl font-medium transition-all">5 MIN</button>
-                <button onClick={() => startTimer(15)} className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs py-3 rounded-2xl font-medium transition-all">15 MIN</button>
-                <button onClick={() => startTimer(25)} className="bg-zinc-100 text-black text-xs py-3 rounded-2xl font-bold transition-all hover:bg-white">25 MIN</button>
-              </div>
-            ) : (
-              <button 
-                onClick={() => setShowHonestyGate(true)}
-                className="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs py-3.5 rounded-2xl tracking-wider font-semibold uppercase transition-all"
-              >
-                Conclude Protocol
-              </button>
-            )}
-
-          </div>
-
-          {/* Activity Log */}
-          <div className="w-full space-y-2">
-            <span className="text-[9px] tracking-widest text-zinc-500 uppercase font-semibold block px-1">Completed Cycles</span>
-            <div className="max-h-28 overflow-y-auto space-y-1.5 hide-scrollbar">
-              {history.length === 0 ? (
-                <div className="bg-zinc-900/30 border border-zinc-900 rounded-xl p-3 text-center">
-                  <p className="text-[11px] text-zinc-600">No active records logged yet.</p>
-                </div>
-              ) : (
-                history.map((item) => (
-                  <div key={item.id} className="bg-zinc-900/60 border border-zinc-800/80 rounded-xl px-3 py-2 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-zinc-200 font-medium truncate max-w-[180px]">{item.task}</p>
-                      <p className="text-[9px] text-zinc-500">{item.note} • {item.duration}m</p>
-                    </div>
-                    <span className="text-xs font-mono text-zinc-400">+{item.earned}</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Honesty System Modal */}
-          {showHonestyGate && (
-            <div className="absolute inset-0 bg-black/90 backdrop-blur-md z-50 flex flex-col justify-end p-6">
-              <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-5 space-y-4">
-                <div>
-                  <h3 className="text-sm font-semibold text-zinc-100">Honesty Gate</h3>
-                  <p className="text-[11px] text-zinc-400 mt-1">Select the condition for ending this session early:</p>
-                </div>
-
-                <div className="space-y-2">
-                  <button 
-                    onClick={() => completeSession(false, 'Pause / Excuse')}
-                    className="w-full bg-zinc-800 hover:bg-zinc-750 text-zinc-200 text-left p-3.5 rounded-xl border border-zinc-700/50 flex justify-between items-center"
-                  >
-                    <div>
-                      <p className="text-xs font-medium">Valid Excuse / Break</p>
-                      <p className="text-[9px] text-zinc-400">Distraction wave or fatigue</p>
-                    </div>
-                    <span className="text-xs font-mono text-zinc-400">+50 PTS</span>
-                  </button>
-
-                  <button 
-                    onClick={() => completeSession(true, 'Target Completed Early')}
-                    className="w-full bg-zinc-100 hover:bg-white text-black text-left p-3.5 rounded-xl flex justify-between items-center"
-                  >
-                    <div>
-                      <p className="text-xs font-bold">Finished Target Early</p>
-                      <p className="text-[9px] text-zinc-600">Goal accomplished ahead of time</p>
-                    </div>
-                    <span className="text-xs font-mono font-bold">+150 PTS</span>
-                  </button>
-
-                  <button 
-                    onClick={() => setShowHonestyGate(false)}
-                    className="w-full text-center text-[11px] text-zinc-500 py-2 hover:text-zinc-300"
-                  >
-                    Resume Focus Session
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
+      <div class="flex items-center gap-4">
+        <div class="glass-card px-4 py-1.5 rounded-full flex items-center gap-2 border border-emerald-500/20 bg-emerald-950/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="font-mono text-sm font-semibold text-emerald-400">1,250 PTS</span>
         </div>
-      );
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+    <!-- HERO SECTION (Scroll Interactive Canvas & Focus Core) -->
+    <section id="hero" class="min-h-[90vh] flex flex-col items-center justify-center px-6 py-12 relative">
+      <div class="max-w-4xl mx-auto text-center space-y-4 mb-8">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-100 to-gray-500">
+          DEEP FOCUS PROTOCOL
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+          Master your neural velocity. Eliminate ambient noise with adaptive audio-kinetic focus architecture.
+        </p>
+      </div>
+
+      <!-- Main Central Interactive Core Card -->
+      <div class="w-full max-w-2xl glass-card rounded-3xl p-8 md:p-12 border border-gray-800 relative shimmer-border shadow-2xl">
+        
+        <!-- Focus Objective Input -->
+        <div class="mb-10">
+          <div class="relative">
+            <i data-lucide="target" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-400"></i>
+            <input type="text" placeholder="Enter single non-negotiable focus target..." 
+              class="w-full bg-gray-900/80 border border-gray-800 rounded-2xl py-4 pl-12 pr-4 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-lg">
+          </div>
+        </div>
+
+        <!-- Central Interactive Timer Ring (Interactive Scale Animation) -->
+        <div class="flex flex-col items-center justify-center my-8">
+          <div id="timerContainer" class="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-indigo-500/20 flex flex-col items-center justify-center relative aura-ring transition-transform duration-500 hover:scale-105 cursor-pointer bg-gray-950/40">
+            <!-- Dynamic Canvas Ring Progress -->
+            <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" class="text-gray-800" fill="transparent" />
+              <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="3" class="text-indigo-500" fill="transparent" stroke-dasharray="283" stroke-dashoffset="70" stroke-linecap="round" />
+            </svg>
+            
+            <span class="text-5xl md:text-7xl font-extrabold font-mono tracking-tight text-white drop-shadow-md">25:00</span>
+            <span class="text-xs uppercase tracking-widest text-indigo-400 font-semibold mt-3 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></span> SYSTEM IDLE
+            </span>
+          </div>
+        </div>
+
+        <!-- Time Controls (Magic UI Style Segment Controls) -->
+        <div class="flex items-center justify-center gap-4 mt-8">
+          <button class="px-6 py-2.5 rounded-xl bg-gray-900/80 border border-gray-800 text-gray-400 font-mono text-sm hover:text-white hover:border-gray-700 transition-all">05 MIN</button>
+          <button class="px-6 py-2.5 rounded-xl bg-gray-900/80 border border-gray-800 text-gray-400 font-mono text-sm hover:text-white hover:border-gray-700 transition-all">15 MIN</button>
+          <button class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-mono text-sm font-bold shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition-all transform hover:-translate-y-0.5">25 MIN</button>
+          <button class="px-6 py-2.5 rounded-xl bg-gray-900/80 border border-gray-800 text-gray-400 font-mono text-sm hover:text-white hover:border-gray-700 transition-all">45 MIN</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- METRICS & DASHBOARD SECTION (For Laptop/iPad Screen Extension) -->
+    <section id="stats" class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card rounded-2xl p-6 border border-gray-800/80 hover:border-gray-700 transition-all">
+        <div class="flex items-center justify-between text-gray-400 mb-4">
+          <span class="text-sm font-medium">Daily Target</span>
+          <i data-lucide="zap" class="w-5 h-5 text-indigo-400"></i>
+        </div>
+        <div class="text-3xl font-extrabold font-mono text-white mb-2">4.5 / 6.0 <span class="text-sm font-normal text-gray-500">hrs</span></div>
+        <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+          <div class="bg-indigo-500 h-full rounded-full" style="width: 75%"></div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 border border-gray-800/80 hover:border-gray-700 transition-all">
+        <div class="flex items-center justify-between text-gray-400 mb-4">
+          <span class="text-sm font-medium">Focus Streak</span>
+          <i data-lucide="flame" class="w-5 h-5 text-orange-400"></i>
+        </div>
+        <div class="text-3xl font-extrabold font-mono text-white mb-2">12 Days</div>
+        <p class="text-xs text-gray-500">Top 5% consistency in current workspace cohort.</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 border border-gray-800/80 hover:border-gray-700 transition-all">
+        <div class="flex items-center justify-between text-gray-400 mb-4">
+          <span class="text-sm font-medium">Active Session Quality</span>
+          <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+        </div>
+        <div class="text-3xl font-extrabold font-mono text-emerald-400 mb-2">98.4%</div>
+        <p class="text-xs text-gray-500">Zero context switching detected in active window.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Background Particle Canvas Interactive Effect
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(129, 140, 248, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    for (let i = 0; i < 60; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Scroll-driven Animation Effect on Timer Core
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const timerCore = document.getElementById('timerContainer');
+      const scaleValue = Math.max(0.85, 1 - scrollY / 1000);
+      timerCore.style.transform = `scale(${scaleValue}) translateY(${scrollY * 0.1}px)`;
+    });
   </script>
 </body>
 </html>
