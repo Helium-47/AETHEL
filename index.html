@@ -1,194 +1,168 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#0B0D17] text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+<html lang="en" class="h-full bg-[#050608] text-slate-100 antialiased selection:bg-[#00F0FF] selection:text-black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHEL — Immersive Deep Focus Protocol</title>
+    <title>AETHEL // KINETIC FOCUS ENGINE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0B0D17',
-                        cardBg: '#121526',
-                        cardBorder: '#1E2338',
-                        accentIndigo: '#6366F1',
-                        accentPurple: '#8B5CF6',
-                        accentCyan: '#06B6D4',
+                        void: '#050608',
+                        surface: '#0B0D13',
+                        surfaceBorder: '#161B26',
+                        neonCyan: '#00F0FF',
+                        neonAmber: '#FFB800',
+                        neonRose: '#FF2A6D',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
+                        mono: ['JetBrains Mono', 'Space Mono', 'monospace'],
+                        sans: ['Syne', 'Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        .glow-indigo { box-shadow: 0 0 35px rgba(99, 102, 241, 0.2); }
-        .glow-ring { filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6)); }
-        .transition-focus { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .grid-matrix {
+            background-image: radial-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .glow-cyan { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.4)); }
+        .clip-corner {
+            clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+        }
+        .clip-corner-rev {
+            clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px);
+        }
     </style>
 </head>
-<body class="min-h-screen bg-darkBg text-slate-200 font-sans flex flex-col justify-between py-6 px-4 md:px-12 selection:bg-indigo-500">
+<body class="h-full bg-void grid-matrix text-slate-200 font-sans flex flex-col justify-between overflow-hidden p-4 md:p-8 select-none">
 
-    <!-- TOP NAVIGATION -->
-    <header id="navHeader" class="max-w-6xl w-full mx-auto flex items-center justify-between py-3 transition-focus">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
-                A
+    <!-- TOP TELEMETRY BAR -->
+    <header class="w-full flex items-center justify-between border-b border-surfaceBorder pb-4 font-mono text-xs">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-neonCyan rotate-45 inline-block"></span>
+                <span class="font-extrabold tracking-widest text-white text-sm">AETHEL//CORE</span>
             </div>
-            <span class="font-bold tracking-wider text-slate-100 text-base">AETHEL</span>
-            <span class="text-[10px] bg-indigo-950/80 text-indigo-400 border border-indigo-800/50 px-2 py-0.5 rounded font-mono font-semibold">V2.0 PRO</span>
+            <span class="text-slate-600">|</span>
+            <span class="text-slate-400">ENGINE STATE: <span id="engineStatus" class="text-neonCyan">STANDBY</span></span>
         </div>
 
-        <nav class="hidden md:flex items-center gap-8 text-xs font-medium text-slate-400">
-            <a href="#" class="text-slate-100 hover:text-white transition">Protocol Home</a>
-            <a href="#" class="hover:text-slate-200 transition">Analytics</a>
-            <a href="#" class="hover:text-slate-200 transition">Focus Vault</a>
-        </nav>
-
-        <div class="flex items-center gap-2 bg-cardBg/80 border border-cardBorder px-3.5 py-1.5 rounded-full text-xs font-mono">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="userPoints" class="text-slate-200 font-bold">1,250 PTS</span>
+        <div class="flex items-center gap-6">
+            <div><span class="text-slate-500">SESSION YIELD:</span> <span id="yieldScore" class="text-white font-bold">1,250 XP</span></div>
+            <div><span class="text-slate-500">INTEGRITY:</span> <span id="integrityScore" class="text-neonAmber font-bold">100%</span></div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="max-w-3xl w-full mx-auto my-auto py-6 space-y-8">
+    <!-- ASYMMETRICAL SPATIAL WORKSPACE -->
+    <main class="flex-1 my-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
 
-        <!-- HERO TITLE BLOCK (Hides in Active Mode) -->
-        <div id="heroBlock" class="text-center space-y-3 transition-focus">
-            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase">
-                Deep Focus Protocol
-            </h1>
-            <p class="text-xs md:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
-                Master your neural velocity. Eliminate ambient noise with adaptive audio-kinetic focus architecture.
-            </p>
-        </div>
-
-        <!-- MAIN TIMER CONTROL CARD -->
-        <div id="mainCard" class="bg-cardBg/90 border border-cardBorder rounded-2xl p-6 md:p-8 space-y-6 glow-indigo backdrop-blur-xl relative transition-focus">
+        <!-- LEFT: KINETIC TIMER HUB (7 COLS) -->
+        <section class="lg:col-span-7 h-full bg-surface/80 border border-surfaceBorder clip-corner p-8 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
             
-            <!-- INPUT SETUP: Implementation Intentions -->
-            <div id="inputSetupBlock" class="space-y-3">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-indigo-400 text-sm">🎯</span>
-                    <input id="primaryTarget" type="text" placeholder="Enter single non-negotiable focus target..." class="w-full bg-darkBg/90 border border-cardBorder rounded-xl pl-10 pr-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">
+            <!-- Target Input Headers -->
+            <div class="space-y-4 z-10">
+                <div class="flex items-center justify-between font-mono text-[10px] text-slate-500 uppercase tracking-widest">
+                    <span>// OBJECTIVE VECTOR</span>
+                    <span>NEURAL FRICTION: OPTIMAL</span>
                 </div>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-indigo-400 text-sm">⚡</span>
-                    <input id="microAction" type="text" placeholder="First 2-min micro-action (activation step)..." class="w-full bg-darkBg/90 border border-cardBorder rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition">
+                <input id="primaryTarget" type="text" placeholder="STATE SINGLE NON-NEGOTIABLE TARGET..." class="w-full bg-transparent border-b-2 border-surfaceBorder focus:border-neonCyan text-lg md:text-2xl font-mono font-bold text-white placeholder-slate-700 py-2 focus:outline-none transition-all">
+                <input id="microAction" type="text" placeholder="First 2-minute activation step..." class="w-full bg-transparent text-xs font-mono text-neonCyan placeholder-slate-600 focus:outline-none">
+            </div>
+
+            <!-- Central HUD Gauge -->
+            <div class="relative flex items-center justify-center my-8 z-10">
+                <svg class="w-72 h-72 md:w-80 md:h-80 transform -rotate-90">
+                    <circle cx="160" cy="160" r="130" stroke="#161B26" stroke-width="12" fill="transparent" />
+                    <circle id="timerProgress" cx="160" cy="160" r="130" stroke="#00F0FF" stroke-width="12" fill="transparent" stroke-dasharray="816" stroke-dashoffset="0" stroke-linecap="square" class="glow-cyan transition-all duration-1000 ease-linear" />
+                </svg>
+
+                <div class="absolute flex flex-col items-center text-center">
+                    <span id="timeReadout" class="text-6xl md:text-7xl font-mono font-extrabold text-white tracking-tighter">25:00</span>
+                    <span class="text-[10px] font-mono text-slate-500 tracking-widest uppercase mt-2">// REMAINING DURATION</span>
                 </div>
             </div>
 
-            <!-- ACTIVE FOCUS HEADER (Shows during session) -->
-            <div id="activeTaskDisplay" class="hidden text-center space-y-1.5 py-2">
-                <div id="displayMicro" class="text-xs font-mono font-bold text-indigo-400 tracking-wider uppercase">ACTION: OPEN TEXTBOOK</div>
-                <div id="displayPrimary" class="text-xs text-slate-400">TARGET: Physics Ch. 4 Questions</div>
+            <!-- Kinetic Action Bar -->
+            <div class="flex items-center justify-between z-10 pt-4 border-t border-surfaceBorder">
+                <div class="flex gap-2 font-mono text-xs">
+                    <button onclick="setDuration(5)" class="dur-btn px-4 py-2 border border-surfaceBorder text-slate-400 hover:border-neonCyan transition">05M</button>
+                    <button onclick="setDuration(15)" class="dur-btn px-4 py-2 border border-surfaceBorder text-slate-400 hover:border-neonCyan transition">15M</button>
+                    <button onclick="setDuration(25)" class="dur-btn px-4 py-2 border border-neonCyan bg-neonCyan/10 text-neonCyan font-bold transition">25M</button>
+                    <button onclick="setDuration(45)" class="dur-btn px-4 py-2 border border-surfaceBorder text-slate-400 hover:border-neonCyan transition">45M</button>
+                </div>
+
+                <button id="lockInBtn" onclick="toggleEngine()" class="px-8 py-3 bg-neonCyan hover:bg-cyan-300 text-black font-mono font-extrabold tracking-widest text-xs clip-corner transition shadow-[0_0_25px_rgba(0,240,255,0.3)]">
+                    INITIATE LOCK-IN
+                </button>
             </div>
+        </section>
 
-            <!-- CIRCULAR TIMER DISPLAY -->
-            <div class="flex flex-col items-center justify-center py-2 relative">
-                <div onclick="toggleTimer()" class="cursor-pointer group relative flex items-center justify-center">
-                    <svg class="w-60 h-60 md:w-64 md:h-64 transform -rotate-90">
-                        <circle cx="120" cy="120" r="104" stroke="#1E2338" stroke-width="6" fill="transparent" class="md:cx-[128] md:cy-[128] md:r-[112]" />
-                        <circle id="timerProgress" cx="120" cy="120" r="104" stroke="url(#indigoGrad)" stroke-width="7" fill="transparent" stroke-dasharray="704" stroke-dashoffset="0" stroke-linecap="round" class="glow-ring transition-all duration-1000 ease-linear md:cx-[128] md:cy-[128] md:r-[112]" />
-                        <defs>
-                            <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#6366F1" />
-                                <stop offset="100%" stop-color="#8B5CF6" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
+        <!-- RIGHT: AUDITORY & TELEMETRY DOCK (5 COLS) -->
+        <section class="lg:col-span-5 h-full flex flex-col gap-6">
+            
+            <!-- Auditory Entrainment & Visualizer Canvas -->
+            <div class="bg-surface/80 border border-surfaceBorder clip-corner-rev p-6 flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between font-mono text-xs text-slate-400 mb-4">
+                        <span class="text-neonAmber">// AUDITORY MASKING ENGINE</span>
+                        <span id="audioModeLabel" class="text-[10px] bg-neonAmber/10 border border-neonAmber/30 px-2 py-0.5 text-neonAmber">OFF</span>
+                    </div>
 
-                    <div class="absolute flex flex-col items-center justify-center text-center">
-                        <span id="timeReadout" class="text-4xl md:text-5xl font-mono font-bold tracking-tight text-white select-none">25:00</span>
-                        <span id="systemStatus" class="mt-2 text-[10px] font-mono tracking-widest text-indigo-400 uppercase flex items-center gap-1.5">
-                            <span id="statusDot" class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                            <span id="statusText">SYSTEM IDLE</span>
-                        </span>
+                    <!-- Canvas Waveform visualizer -->
+                    <div class="w-full h-24 bg-void border border-surfaceBorder my-4 relative overflow-hidden flex items-center justify-center">
+                        <canvas id="visualizerCanvas" class="w-full h-full"></canvas>
+                        <span id="canvasPlaceholder" class="absolute text-[10px] font-mono text-slate-600 uppercase">AURAL OSCILLATOR INACTIVE</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 font-mono text-xs mt-4">
+                        <button onclick="setAudio('none')" class="audio-btn border border-neonCyan text-neonCyan py-2 text-center bg-neonCyan/10 transition">MUTE</button>
+                        <button onclick="setAudio('binaural')" class="audio-btn border border-surfaceBorder text-slate-400 py-2 text-center hover:border-neonCyan transition">16Hz BETA</button>
+                        <button onclick="setAudio('pink')" class="audio-btn border border-surfaceBorder text-slate-400 py-2 text-center hover:border-neonCyan transition">PINK NOISE</button>
+                    </div>
+                </div>
+
+                <!-- Live Session Telemetry -->
+                <div class="space-y-3 pt-6 border-t border-surfaceBorder font-mono text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">DISTRACTION DRIFT:</span>
+                        <span id="driftCount" class="text-white">0 DETECTED</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">FOCUS EFFICIENCY:</span>
+                        <span id="efficiencyVal" class="text-neonCyan">100.0%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- DURATION SELECTOR BUTTONS -->
-            <div id="durationSelector" class="grid grid-cols-4 gap-2 md:gap-3 font-mono text-xs">
-                <button onclick="setDuration(5)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">05 MIN</button>
-                <button onclick="setDuration(15)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">15 MIN</button>
-                <button onclick="setDuration(25)" class="time-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 font-bold py-2.5 rounded-xl transition">25 MIN</button>
-                <button onclick="setDuration(45)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">45 MIN</button>
-            </div>
-
-            <!-- AUDITORY MASKING TOGGLES -->
-            <div id="audioSelector" class="pt-2 border-t border-cardBorder/60 flex items-center justify-between text-xs font-mono text-slate-400">
-                <span class="text-[11px] text-slate-500">AUDITORY MASKING:</span>
-                <div class="flex gap-2">
-                    <button id="audioNone" onclick="setAudioEngine('none')" class="audio-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-lg transition">OFF</button>
-                    <button id="audioBinaural" onclick="setAudioEngine('binaural')" class="audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition">16Hz BETA</button>
-                    <button id="audioPink" onclick="setAudioEngine('pink')" class="audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition">PINK NOISE</button>
+            <!-- Bottom Console Stats -->
+            <div class="bg-surface/80 border border-surfaceBorder p-6 font-mono text-xs flex justify-between items-center">
+                <div>
+                    <div class="text-slate-500 text-[10px]">DAILY TARGET LOG</div>
+                    <div class="text-lg font-bold text-white mt-1">4.5 / 6.0 HRS</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-slate-500 text-[10px]">CONSISTENCY STREAK</div>
+                    <div class="text-lg font-bold text-neonAmber mt-1">12 DAYS</div>
                 </div>
             </div>
 
-            <!-- ACTIVE CONTROL BUTTONS -->
-            <div id="activeControls" class="hidden flex items-center justify-center gap-4 pt-2">
-                <button onclick="terminateSession(false)" class="border border-rose-500/40 text-rose-400 hover:bg-rose-500/10 text-xs font-mono px-6 py-2 rounded-xl transition">
-                    ABORT SESSION
-                </button>
-                <button onclick="terminateSession(true)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono font-bold px-6 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30">
-                    COMPLETE SESSION
-                </button>
-            </div>
-        </div>
-
-        <!-- BOTTOM ANALYTICS CARDS GRID -->
-        <div id="analyticsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 transition-focus">
-            <!-- Daily Target Card -->
-            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-3">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-400 font-medium">Daily Target</span>
-                    <span class="text-indigo-400 text-xs">⚡</span>
-                </div>
-                <div class="text-xl font-bold font-mono text-white flex items-baseline gap-1">
-                    <span id="currentHours">4.5</span> <span class="text-slate-500 text-sm font-normal">/ 6.0 hrs</span>
-                </div>
-                <div class="w-full bg-darkBg rounded-full h-1.5 overflow-hidden">
-                    <div id="targetProgressBar" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
-                </div>
-            </div>
-
-            <!-- Focus Streak Card -->
-            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-2">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-400 font-medium">Focus Streak</span>
-                    <span class="text-amber-400 text-xs">🔥</span>
-                </div>
-                <div id="streakDays" class="text-xl font-bold font-mono text-white">12 Days</div>
-                <p class="text-[10px] text-slate-500 leading-tight">Top 3% consistency in current workspace cohort</p>
-            </div>
-
-            <!-- Active Session Quality Card -->
-            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-2">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-400 font-medium">Active Session Quality</span>
-                    <span class="text-indigo-400 text-xs">📈</span>
-                </div>
-                <div id="sessionQuality" class="text-xl font-bold font-mono text-white">98.4%</div>
-                <p id="qualitySubtext" class="text-[10px] text-slate-500 leading-tight">Zero context-switching detected in active window</p>
-            </div>
-        </div>
+        </section>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer id="navFooter" class="max-w-6xl w-full mx-auto flex items-center justify-between text-[11px] font-mono text-slate-600 border-t border-cardBorder/40 pt-4 transition-focus">
-        <div>AETHEL PROTOCOL ARCHITECTURE</div>
-        <div>STATUS: <span class="text-indigo-400">READY</span></div>
+    <!-- FOOTER SYSTEM LOG -->
+    <footer class="w-full border-t border-surfaceBorder pt-4 flex items-center justify-between font-mono text-[10px] text-slate-600">
+        <div>AETHEL PROTOCOL // NO BOILERPLATE ARCHITECTURE</div>
+        <div>STATION ID: LOCALHOST_COCKPIT</div>
     </footer>
 
-    <!-- SCRIPT & ENGINE LOGIC -->
+    <!-- ENGINE LOGIC -->
     <script>
         let selectedDuration = 25 * 60;
         let timeRemaining = selectedDuration;
@@ -197,41 +171,39 @@
         let audioCtx = null;
         let currentAudioMode = 'none';
         let activeOscillators = [];
-        let totalPoints = 1250;
-        let completedHours = 4.5;
-        let streakDays = 12;
-        let tabSwitchCount = 0;
+        let tabSwitches = 0;
+        let animFrameId = null;
 
         const timeReadout = document.getElementById('timeReadout');
         const timerProgress = document.getElementById('timerProgress');
-        const systemStatus = document.getElementById('systemStatus');
-        const statusText = document.getElementById('statusText');
-        const statusDot = document.getElementById('statusDot');
-        const heroBlock = document.getElementById('heroBlock');
-        const inputSetupBlock = document.getElementById('inputSetupBlock');
-        const activeTaskDisplay = document.getElementById('activeTaskDisplay');
-        const durationSelector = document.getElementById('durationSelector');
-        const audioSelector = document.getElementById('audioSelector');
-        const activeControls = document.getElementById('activeControls');
-        const analyticsGrid = document.getElementById('analyticsGrid');
+        const lockInBtn = document.getElementById('lockInBtn');
+        const engineStatus = document.getElementById('engineStatus');
+        const canvas = document.getElementById('visualizerCanvas');
+        const canvasCtx = canvas.getContext('2d');
 
         function setDuration(mins) {
             if (isRunning) return;
             selectedDuration = mins * 60;
             timeRemaining = selectedDuration;
-            document.querySelectorAll('.time-btn').forEach(btn => {
-                btn.className = "time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition";
+            document.querySelectorAll('.dur-btn').forEach(btn => {
+                btn.className = "dur-btn px-4 py-2 border border-surfaceBorder text-slate-400 hover:border-neonCyan transition";
             });
-            event.currentTarget.className = "time-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 font-bold py-2.5 rounded-xl transition";
+            event.currentTarget.className = "dur-btn px-4 py-2 border border-neonCyan bg-neonCyan/10 text-neonCyan font-bold transition";
             updateDisplay();
         }
 
-        function setAudioEngine(mode) {
+        function setAudio(mode) {
             currentAudioMode = mode;
+            document.getElementById('audioModeLabel').innerText = mode.toUpperCase();
             document.querySelectorAll('.audio-btn').forEach(btn => {
-                btn.className = "audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition";
+                btn.className = "audio-btn border border-surfaceBorder text-slate-400 py-2 text-center hover:border-neonCyan transition";
             });
-            event.currentTarget.className = "audio-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-lg transition";
+            event.currentTarget.className = "audio-btn border border-neonCyan text-neonCyan py-2 text-center bg-neonCyan/10 transition";
+            
+            if (isRunning) {
+                stopAudio();
+                startAudio();
+            }
         }
 
         function updateDisplay() {
@@ -239,53 +211,58 @@
             const s = (timeRemaining % 60).toString().padStart(2, '0');
             timeReadout.innerText = `${m}:${s}`;
             
-            const totalDash = 704;
+            const totalDash = 816;
             const progress = totalDash - (timeRemaining / selectedDuration) * totalDash;
             timerProgress.style.strokeDashoffset = progress;
         }
 
-        function toggleTimer() {
+        function toggleEngine() {
             if (isRunning) {
-                terminateSession(false);
+                stopEngine(false);
             } else {
-                startLockInSession();
+                startEngine();
             }
         }
 
-        function startLockInSession() {
-            const primary = document.getElementById('primaryTarget').value.trim() || 'Deep Focus Session';
-            const micro = document.getElementById('microAction').value.trim() || 'Execute First Step';
-
-            document.getElementById('displayPrimary').innerText = `TARGET: ${primary}`;
-            document.getElementById('displayMicro').innerText = `ACTION: ${micro.toUpperCase()}`;
-
-            tabSwitchCount = 0;
+        function startEngine() {
             isRunning = true;
+            lockInBtn.innerText = "ABORT SESSION";
+            lockInBtn.className = "px-8 py-3 bg-neonRose text-white font-mono font-extrabold tracking-widest text-xs clip-corner transition shadow-[0_0_25px_rgba(255,42,109,0.3)]";
+            engineStatus.innerText = "ACTIVE_LOCK_IN";
+            engineStatus.className = "text-neonRose animate-pulse";
 
-            // Smoothly enter active focus mode
-            heroBlock.classList.add('opacity-30');
-            inputSetupBlock.classList.add('hidden');
-            durationSelector.classList.add('hidden');
-            audioSelector.classList.add('hidden');
-            activeTaskDisplay.classList.remove('hidden');
-            activeControls.classList.remove('hidden');
-
-            statusText.innerText = "PROTOCOL ACTIVE";
-            statusDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping";
-
-            startAudioEngine();
+            startAudio();
+            drawCanvasVisuals();
 
             timerInterval = setInterval(() => {
                 timeRemaining--;
                 updateDisplay();
                 if (timeRemaining <= 0) {
-                    terminateSession(true);
+                    stopEngine(true);
                 }
             }, 1000);
         }
 
-        function startAudioEngine() {
+        function stopEngine(completed) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            stopAudio();
+            cancelAnimationFrame(animFrameId);
+
+            lockInBtn.innerText = "INITIATE LOCK-IN";
+            lockInBtn.className = "px-8 py-3 bg-neonCyan hover:bg-cyan-300 text-black font-mono font-extrabold tracking-widest text-xs clip-corner transition shadow-[0_0_25px_rgba(0,240,255,0.3)]";
+            engineStatus.innerText = "STANDBY";
+            engineStatus.className = "text-neonCyan";
+
+            timeRemaining = selectedDuration;
+            updateDisplay();
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('canvasPlaceholder').style.display = 'block';
+        }
+
+        function startAudio() {
             if (currentAudioMode === 'none') return;
+            document.getElementById('canvasPlaceholder').style.display = 'none';
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
             if (currentAudioMode === 'binaural') {
@@ -328,7 +305,7 @@
             }
         }
 
-        function stopAudioEngine() {
+        function stopAudio() {
             activeOscillators.forEach(osc => {
                 try { osc.stop(); } catch(e){}
             });
@@ -336,45 +313,31 @@
             activeOscillators = [];
         }
 
+        function drawCanvasVisuals() {
+            if (!isRunning || currentAudioMode === 'none') return;
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            canvasCtx.strokeStyle = currentAudioMode === 'binaural' ? '#00F0FF' : '#FFB800';
+            canvasCtx.lineWidth = 2;
+            canvasCtx.beginPath();
+
+            const time = Date.now() * 0.005;
+            for (let x = 0; x < canvas.width; x++) {
+                const y = Math.sin(x * 0.05 + time) * 15 + canvas.height / 2;
+                if (x === 0) canvasCtx.moveTo(x, y);
+                else canvasCtx.lineTo(x, y);
+            }
+            canvasCtx.stroke();
+            animFrameId = requestAnimationFrame(drawCanvasVisuals);
+        }
+
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && isRunning) {
-                tabSwitchCount++;
-                const quality = Math.max(50, (100 - (tabSwitchCount * 12))).toFixed(1);
-                document.getElementById('sessionQuality').innerText = `${quality}%`;
-                document.getElementById('qualitySubtext').innerText = `${tabSwitchCount} tab-switches detected`;
+                tabSwitches++;
+                document.getElementById('driftCount').innerText = `${tabSwitches} DETECTED`;
+                const eff = Math.max(40, 100 - (tabSwitches * 15)).toFixed(1);
+                document.getElementById('efficiencyVal').innerText = `${eff}%`;
             }
         });
-
-        function terminateSession(completed = false) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isRunning = false;
-            stopAudioEngine();
-
-            if (completed) {
-                const addedHours = (selectedDuration / 3600);
-                completedHours = Math.min(6.0, completedHours + addedHours);
-                totalPoints += Math.floor((selectedDuration / 60) * 10);
-
-                document.getElementById('currentHours').innerText = completedHours.toFixed(1);
-                document.getElementById('targetProgressBar').style.width = `${(completedHours / 6.0) * 100}%`;
-                document.getElementById('userPoints').innerText = `${totalPoints.toLocaleString()} PTS`;
-            }
-
-            // Restore Idle UI
-            heroBlock.classList.remove('opacity-30');
-            inputSetupBlock.classList.remove('hidden');
-            durationSelector.classList.remove('hidden');
-            audioSelector.classList.remove('hidden');
-            activeTaskDisplay.classList.add('hidden');
-            activeControls.classList.add('hidden');
-
-            statusText.innerText = "SYSTEM IDLE";
-            statusDot.className = "w-1.5 h-1.5 rounded-full bg-indigo-400";
-
-            timeRemaining = selectedDuration;
-            updateDisplay();
-        }
 
         updateDisplay();
     </script>
