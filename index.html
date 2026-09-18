@@ -1,224 +1,295 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#090A0F] text-slate-100 antialiased selection:bg-[#00F0FF] selection:text-black">
+<html lang="en" class="h-full bg-[#0B0D17] text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHEL | Deep Focus Architecture</title>
+    <title>AETHEL — Immersive Deep Focus Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        obsidian: '#090A0F',
-                        slateCard: '#12141D',
-                        borderSlate: '#1E2230',
-                        hyperCyan: '#00F0FF',
-                        energyAmber: '#FFB800',
+                        darkBg: '#0B0D17',
+                        cardBg: '#121526',
+                        cardBorder: '#1E2338',
+                        accentIndigo: '#6366F1',
+                        accentPurple: '#8B5CF6',
+                        accentCyan: '#06B6D4',
                     },
                     fontFamily: {
-                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
                         sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        .glow-cyan { box-shadow: 0 0 25px rgba(0, 240, 255, 0.15); }
-        .glow-amber { box-shadow: 0 0 25px rgba(255, 184, 0, 0.15); }
-        .transition-focus { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .glow-indigo { box-shadow: 0 0 35px rgba(99, 102, 241, 0.2); }
+        .glow-ring { filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6)); }
+        .transition-focus { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
-<body class="h-full bg-obsidian text-slate-200 font-sans flex flex-col justify-between overflow-x-hidden">
+<body class="min-h-screen bg-darkBg text-slate-200 font-sans flex flex-col justify-between py-6 px-4 md:px-12 selection:bg-indigo-500">
 
-    <!-- TOP NAVIGATION (Hides in Active State) -->
-    <header id="navHeader" class="transition-focus border-b border-borderSlate/60 bg-obsidian/80 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+    <!-- TOP NAVIGATION -->
+    <header id="navHeader" class="max-w-6xl w-full mx-auto flex items-center justify-between py-3 transition-focus">
         <div class="flex items-center gap-3">
-            <div class="w-3 h-3 rounded-full bg-hyperCyan animate-pulse"></div>
-            <span class="font-extrabold tracking-wider text-slate-100 font-mono text-sm">AETHEL // PROTOCOL v3.0</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
+                A
+            </div>
+            <span class="font-bold tracking-wider text-slate-100 text-base">AETHEL</span>
+            <span class="text-[10px] bg-indigo-950/80 text-indigo-400 border border-indigo-800/50 px-2 py-0.5 rounded font-mono font-semibold">V2.0 PRO</span>
         </div>
-        <div class="flex items-center gap-6 text-xs font-mono text-slate-400">
-            <div>POINTS: <span id="userPoints" class="text-hyperCyan font-bold">1,250</span></div>
-            <div>MULTIPLIER: <span id="userMultiplier" class="text-energyAmber font-bold">1.0x</span></div>
+
+        <nav class="hidden md:flex items-center gap-8 text-xs font-medium text-slate-400">
+            <a href="#" class="text-slate-100 hover:text-white transition">Protocol Home</a>
+            <a href="#" class="hover:text-slate-200 transition">Analytics</a>
+            <a href="#" class="hover:text-slate-200 transition">Focus Vault</a>
+        </nav>
+
+        <div class="flex items-center gap-2 bg-cardBg/80 border border-cardBorder px-3.5 py-1.5 rounded-full text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="userPoints" class="text-slate-200 font-bold">1,250 PTS</span>
         </div>
     </header>
 
-    <!-- MAIN WORKSPACE -->
-    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-1 flex flex-col justify-center items-center">
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-3xl w-full mx-auto my-auto py-6 space-y-8">
 
-        <!-- IDLE / SETUP STATE -->
-        <section id="setupState" class="w-full space-y-8 transition-focus">
-            <!-- Stage 1: Implementation Intentions -->
-            <div class="bg-slateCard border border-borderSlate rounded-xl p-6 glow-cyan space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xs font-mono uppercase tracking-widest text-hyperCyan font-bold">1. Implementation Intention (Zeigarnik Setup)</h2>
-                    <span class="text-xs text-slate-500 font-mono">Cognitive Friction Control</span>
+        <!-- HERO TITLE BLOCK (Hides in Active Mode) -->
+        <div id="heroBlock" class="text-center space-y-3 transition-focus">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase">
+                Deep Focus Protocol
+            </h1>
+            <p class="text-xs md:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
+                Master your neural velocity. Eliminate ambient noise with adaptive audio-kinetic focus architecture.
+            </p>
+        </div>
+
+        <!-- MAIN TIMER CONTROL CARD -->
+        <div id="mainCard" class="bg-cardBg/90 border border-cardBorder rounded-2xl p-6 md:p-8 space-y-6 glow-indigo backdrop-blur-xl relative transition-focus">
+            
+            <!-- INPUT SETUP: Implementation Intentions -->
+            <div id="inputSetupBlock" class="space-y-3">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-indigo-400 text-sm">🎯</span>
+                    <input id="primaryTarget" type="text" placeholder="Enter single non-negotiable focus target..." class="w-full bg-darkBg/90 border border-cardBorder rounded-xl pl-10 pr-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">
                 </div>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-mono text-slate-400 mb-1">PRIMARY OBJECTIVE</label>
-                        <input id="primaryTarget" type="text" placeholder="e.g., Complete Physics Ch. 4 Questions" class="w-full bg-obsidian border border-borderSlate rounded px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-hyperCyan transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-mono text-slate-400 mb-1">FIRST 2-MIN MICRO-ACTION</label>
-                        <input id="microAction" type="text" placeholder="e.g., Open textbook & write Q1 title" class="w-full bg-obsidian border border-borderSlate rounded px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-hyperCyan transition">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-indigo-400 text-sm">⚡</span>
+                    <input id="microAction" type="text" placeholder="First 2-min micro-action (activation step)..." class="w-full bg-darkBg/90 border border-cardBorder rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition">
+                </div>
+            </div>
+
+            <!-- ACTIVE FOCUS HEADER (Shows during session) -->
+            <div id="activeTaskDisplay" class="hidden text-center space-y-1.5 py-2">
+                <div id="displayMicro" class="text-xs font-mono font-bold text-indigo-400 tracking-wider uppercase">ACTION: OPEN TEXTBOOK</div>
+                <div id="displayPrimary" class="text-xs text-slate-400">TARGET: Physics Ch. 4 Questions</div>
+            </div>
+
+            <!-- CIRCULAR TIMER DISPLAY -->
+            <div class="flex flex-col items-center justify-center py-2 relative">
+                <div onclick="toggleTimer()" class="cursor-pointer group relative flex items-center justify-center">
+                    <svg class="w-60 h-60 md:w-64 md:h-64 transform -rotate-90">
+                        <circle cx="120" cy="120" r="104" stroke="#1E2338" stroke-width="6" fill="transparent" class="md:cx-[128] md:cy-[128] md:r-[112]" />
+                        <circle id="timerProgress" cx="120" cy="120" r="104" stroke="url(#indigoGrad)" stroke-width="7" fill="transparent" stroke-dasharray="704" stroke-dashoffset="0" stroke-linecap="round" class="glow-ring transition-all duration-1000 ease-linear md:cx-[128] md:cy-[128] md:r-[112]" />
+                        <defs>
+                            <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366F1" />
+                                <stop offset="100%" stop-color="#8B5CF6" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    <div class="absolute flex flex-col items-center justify-center text-center">
+                        <span id="timeReadout" class="text-4xl md:text-5xl font-mono font-bold tracking-tight text-white select-none">25:00</span>
+                        <span id="systemStatus" class="mt-2 text-[10px] font-mono tracking-widest text-indigo-400 uppercase flex items-center gap-1.5">
+                            <span id="statusDot" class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                            <span id="statusText">SYSTEM IDLE</span>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Stage 2: Session Parameters & Audio Entrainment -->
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Duration Select -->
-                <div class="bg-slateCard border border-borderSlate rounded-xl p-6 space-y-4">
-                    <h2 class="text-xs font-mono uppercase tracking-widest text-hyperCyan font-bold">2. Duration Selection</h2>
-                    <div class="grid grid-cols-4 gap-2 font-mono text-xs">
-                        <button onclick="setDuration(5)" class="time-btn border border-borderSlate hover:border-hyperCyan py-2 rounded bg-obsidian text-slate-300 transition">05M</button>
-                        <button onclick="setDuration(15)" class="time-btn border border-borderSlate hover:border-hyperCyan py-2 rounded bg-obsidian text-slate-300 transition">15M</button>
-                        <button onclick="setDuration(25)" class="time-btn border border-borderSlate border-hyperCyan py-2 rounded bg-obsidian text-hyperCyan font-bold transition">25M</button>
-                        <button onclick="setDuration(45)" class="time-btn border border-borderSlate hover:border-hyperCyan py-2 rounded bg-obsidian text-slate-300 transition">45M</button>
-                    </div>
-                </div>
+            <!-- DURATION SELECTOR BUTTONS -->
+            <div id="durationSelector" class="grid grid-cols-4 gap-2 md:gap-3 font-mono text-xs">
+                <button onclick="setDuration(5)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">05 MIN</button>
+                <button onclick="setDuration(15)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">15 MIN</button>
+                <button onclick="setDuration(25)" class="time-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 font-bold py-2.5 rounded-xl transition">25 MIN</button>
+                <button onclick="setDuration(45)" class="time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition">45 MIN</button>
+            </div>
 
-                <!-- Auditory Entrainment -->
-                <div class="bg-slateCard border border-borderSlate rounded-xl p-6 space-y-4">
-                    <h2 class="text-xs font-mono uppercase tracking-widest text-hyperCyan font-bold">3. Auditory Masking</h2>
-                    <div class="grid grid-cols-3 gap-2 font-mono text-xs">
-                        <button id="audioNone" onclick="setAudioEngine('none')" class="audio-btn border border-hyperCyan py-2 rounded bg-obsidian text-hyperCyan font-bold transition">OFF</button>
-                        <button id="audioBinaural" onclick="setAudioEngine('binaural')" class="audio-btn border border-borderSlate hover:border-hyperCyan py-2 rounded bg-obsidian text-slate-300 transition">16Hz BETA</button>
-                        <button id="audioPink" onclick="setAudioEngine('pink')" class="audio-btn border border-borderSlate hover:border-hyperCyan py-2 rounded bg-obsidian text-slate-300 transition">PINK NOISE</button>
-                    </div>
+            <!-- AUDITORY MASKING TOGGLES -->
+            <div id="audioSelector" class="pt-2 border-t border-cardBorder/60 flex items-center justify-between text-xs font-mono text-slate-400">
+                <span class="text-[11px] text-slate-500">AUDITORY MASKING:</span>
+                <div class="flex gap-2">
+                    <button id="audioNone" onclick="setAudioEngine('none')" class="audio-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-lg transition">OFF</button>
+                    <button id="audioBinaural" onclick="setAudioEngine('binaural')" class="audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition">16Hz BETA</button>
+                    <button id="audioPink" onclick="setAudioEngine('pink')" class="audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition">PINK NOISE</button>
                 </div>
             </div>
 
-            <!-- Lock-in Trigger Button -->
-            <button onclick="startLockInSession()" class="w-full py-4 bg-hyperCyan hover:bg-cyan-300 text-obsidian font-extrabold font-mono rounded-xl text-lg tracking-wider transition glow-cyan flex items-center justify-center gap-2">
-                <span>LOCK IN PROTOCOL</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            </button>
-        </section>
-
-        <!-- ACTIVE FOCUS STATE (Zero-Distraction Mode) -->
-        <section id="activeState" class="hidden w-full flex flex-col items-center justify-center space-y-8 py-12 transition-focus">
-            <div class="text-center space-y-2">
-                <div id="displayMicro" class="font-mono text-energyAmber text-sm font-bold tracking-widest uppercase">ACTION: OPEN TEXTBOOK</div>
-                <div id="displayPrimary" class="text-slate-400 text-xs font-mono">TARGET: Physics Ch. 4 Questions</div>
-            </div>
-
-            <!-- Massive Minimal Timer Display -->
-            <div class="relative flex items-center justify-center">
-                <div class="text-8xl md:text-9xl font-mono font-extrabold tracking-tighter text-slate-100 select-none" id="timeReadout">
-                    25:00
-                </div>
-            </div>
-
-            <!-- Active Protocol Controls -->
-            <div class="flex items-center gap-4 pt-4">
-                <button onclick="terminateSession(false)" class="border border-red-500/40 text-red-400 hover:bg-red-500/10 font-mono text-xs px-6 py-2 rounded transition">
+            <!-- ACTIVE CONTROL BUTTONS -->
+            <div id="activeControls" class="hidden flex items-center justify-center gap-4 pt-2">
+                <button onclick="terminateSession(false)" class="border border-rose-500/40 text-rose-400 hover:bg-rose-500/10 text-xs font-mono px-6 py-2 rounded-xl transition">
                     ABORT SESSION
                 </button>
+                <button onclick="terminateSession(true)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono font-bold px-6 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30">
+                    COMPLETE SESSION
+                </button>
             </div>
-        </section>
+        </div>
 
-        <!-- POST-SESSION REVIEW STATE -->
-        <section id="reviewState" class="hidden w-full max-w-lg bg-slateCard border border-borderSlate rounded-xl p-8 space-y-6 text-center transition-focus glow-amber">
-            <div class="space-y-1">
-                <h2 class="text-xl font-bold font-mono text-energyAmber">SESSION COMPLETE</h2>
-                <p class="text-xs text-slate-400 font-mono">Neural velocity yield calculated.</p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 py-4 border-y border-borderSlate font-mono">
-                <div class="bg-obsidian p-4 rounded border border-borderSlate">
-                    <div class="text-xs text-slate-500">POINTS EARNED</div>
-                    <div id="earnedPoints" class="text-2xl font-bold text-hyperCyan">+250</div>
+        <!-- BOTTOM ANALYTICS CARDS GRID -->
+        <div id="analyticsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 transition-focus">
+            <!-- Daily Target Card -->
+            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Daily Target</span>
+                    <span class="text-indigo-400 text-xs">⚡</span>
                 </div>
-                <div class="bg-obsidian p-4 rounded border border-borderSlate">
-                    <div class="text-xs text-slate-500">FOCUS EFFICIENCY</div>
-                    <div id="efficiencyScore" class="text-2xl font-bold text-energyAmber">100%</div>
+                <div class="text-xl font-bold font-mono text-white flex items-baseline gap-1">
+                    <span id="currentHours">4.5</span> <span class="text-slate-500 text-sm font-normal">/ 6.0 hrs</span>
+                </div>
+                <div class="w-full bg-darkBg rounded-full h-1.5 overflow-hidden">
+                    <div id="targetProgressBar" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
                 </div>
             </div>
 
-            <button onclick="exportToNotion()" class="w-full py-3 bg-obsidian hover:bg-borderSlate border border-borderSlate text-slate-200 font-mono text-xs rounded transition flex items-center justify-center gap-2">
-                <svg class="w-4 h-4 text-hyperCyan" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
-                <span>COPY MARKDOWN LOG (FOR NOTION/ANKI)</span>
-            </button>
+            <!-- Focus Streak Card -->
+            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Focus Streak</span>
+                    <span class="text-amber-400 text-xs">🔥</span>
+                </div>
+                <div id="streakDays" class="text-xl font-bold font-mono text-white">12 Days</div>
+                <p class="text-[10px] text-slate-500 leading-tight">Top 3% consistency in current workspace cohort</p>
+            </div>
 
-            <button onclick="resetWorkspace()" class="w-full py-3 bg-hyperCyan text-obsidian font-bold font-mono text-xs rounded transition">
-                RETURN TO WORKSPACE
-            </button>
-        </section>
+            <!-- Active Session Quality Card -->
+            <div class="bg-cardBg/80 border border-cardBorder rounded-xl p-5 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-medium">Active Session Quality</span>
+                    <span class="text-indigo-400 text-xs">📈</span>
+                </div>
+                <div id="sessionQuality" class="text-xl font-bold font-mono text-white">98.4%</div>
+                <p id="qualitySubtext" class="text-[10px] text-slate-500 leading-tight">Zero context-switching detected in active window</p>
+            </div>
+        </div>
 
     </main>
 
-    <!-- FOOTER STATS (Hides in Active State) -->
-    <footer id="navFooter" class="transition-focus border-t border-borderSlate/60 bg-obsidian/80 backdrop-blur-md px-6 py-4">
-        <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between text-xs font-mono text-slate-500 gap-4">
-            <div>ACTIVE TASK MASKING: <span class="text-slate-300">STRICT</span></div>
-            <div>NEURAL ENTRAINMENT: <span id="audioLabel" class="text-slate-300">INACTIVE</span></div>
-            <div>STATUS: <span class="text-hyperCyan">READY</span></div>
-        </div>
+    <!-- FOOTER -->
+    <footer id="navFooter" class="max-w-6xl w-full mx-auto flex items-center justify-between text-[11px] font-mono text-slate-600 border-t border-cardBorder/40 pt-4 transition-focus">
+        <div>AETHEL PROTOCOL ARCHITECTURE</div>
+        <div>STATUS: <span class="text-indigo-400">READY</span></div>
     </footer>
 
-    <!-- LOGIC & AUDIO SYNTHESIS ENGINE -->
+    <!-- SCRIPT & ENGINE LOGIC -->
     <script>
-        // State Variables
         let selectedDuration = 25 * 60;
         let timeRemaining = selectedDuration;
         let timerInterval = null;
+        let isRunning = false;
         let audioCtx = null;
         let currentAudioMode = 'none';
         let activeOscillators = [];
-        let points = 1250;
+        let totalPoints = 1250;
+        let completedHours = 4.5;
+        let streakDays = 12;
         let tabSwitchCount = 0;
 
-        // Dom Elements
-        const setupState = document.getElementById('setupState');
-        const activeState = document.getElementById('activeState');
-        const reviewState = document.getElementById('reviewState');
-        const navHeader = document.getElementById('navHeader');
-        const navFooter = document.getElementById('navFooter');
         const timeReadout = document.getElementById('timeReadout');
+        const timerProgress = document.getElementById('timerProgress');
+        const systemStatus = document.getElementById('systemStatus');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const heroBlock = document.getElementById('heroBlock');
+        const inputSetupBlock = document.getElementById('inputSetupBlock');
+        const activeTaskDisplay = document.getElementById('activeTaskDisplay');
+        const durationSelector = document.getElementById('durationSelector');
+        const audioSelector = document.getElementById('audioSelector');
+        const activeControls = document.getElementById('activeControls');
+        const analyticsGrid = document.getElementById('analyticsGrid');
 
-        // Set Duration Setup
         function setDuration(mins) {
+            if (isRunning) return;
             selectedDuration = mins * 60;
             timeRemaining = selectedDuration;
             document.querySelectorAll('.time-btn').forEach(btn => {
-                btn.classList.remove('border-hyperCyan', 'text-hyperCyan', 'font-bold');
-                btn.classList.add('text-slate-300');
+                btn.className = "time-btn border border-cardBorder hover:border-indigo-500/60 py-2.5 rounded-xl bg-darkBg/60 text-slate-400 transition";
             });
-            event.target.classList.add('border-hyperCyan', 'text-hyperCyan', 'font-bold');
+            event.currentTarget.className = "time-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 font-bold py-2.5 rounded-xl transition";
             updateDisplay();
         }
 
-        // Set Audio Mode Setup
         function setAudioEngine(mode) {
             currentAudioMode = mode;
             document.querySelectorAll('.audio-btn').forEach(btn => {
-                btn.classList.remove('border-hyperCyan', 'text-hyperCyan', 'font-bold');
-                btn.classList.add('text-slate-300');
+                btn.className = "audio-btn border border-cardBorder hover:border-indigo-500/50 px-3 py-1 rounded-lg text-slate-400 transition";
             });
-            event.target.classList.add('border-hyperCyan', 'text-hyperCyan', 'font-bold');
-            document.getElementById('audioLabel').innerText = mode.toUpperCase();
+            event.currentTarget.className = "audio-btn border border-indigo-500 bg-indigo-600/20 text-indigo-300 px-3 py-1 rounded-lg transition";
         }
 
-        // Timer Display Formatter
         function updateDisplay() {
             const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
             const s = (timeRemaining % 60).toString().padStart(2, '0');
             timeReadout.innerText = `${m}:${s}`;
+            
+            const totalDash = 704;
+            const progress = totalDash - (timeRemaining / selectedDuration) * totalDash;
+            timerProgress.style.strokeDashoffset = progress;
         }
 
-        // Web Audio API Generators (Binaural Beats & Pink Noise)
+        function toggleTimer() {
+            if (isRunning) {
+                terminateSession(false);
+            } else {
+                startLockInSession();
+            }
+        }
+
+        function startLockInSession() {
+            const primary = document.getElementById('primaryTarget').value.trim() || 'Deep Focus Session';
+            const micro = document.getElementById('microAction').value.trim() || 'Execute First Step';
+
+            document.getElementById('displayPrimary').innerText = `TARGET: ${primary}`;
+            document.getElementById('displayMicro').innerText = `ACTION: ${micro.toUpperCase()}`;
+
+            tabSwitchCount = 0;
+            isRunning = true;
+
+            // Smoothly enter active focus mode
+            heroBlock.classList.add('opacity-30');
+            inputSetupBlock.classList.add('hidden');
+            durationSelector.classList.add('hidden');
+            audioSelector.classList.add('hidden');
+            activeTaskDisplay.classList.remove('hidden');
+            activeControls.classList.remove('hidden');
+
+            statusText.innerText = "PROTOCOL ACTIVE";
+            statusDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping";
+
+            startAudioEngine();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateDisplay();
+                if (timeRemaining <= 0) {
+                    terminateSession(true);
+                }
+            }, 1000);
+        }
+
         function startAudioEngine() {
             if (currentAudioMode === 'none') return;
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
             if (currentAudioMode === 'binaural') {
-                // 400Hz Base, 416Hz Target = 16Hz Beta Entrainment
                 const merger = audioCtx.createChannelMerger(2);
-                
                 const oscL = audioCtx.createOscillator();
                 oscL.frequency.value = 400;
                 oscL.connect(merger, 0, 0);
@@ -232,7 +303,6 @@
                 oscR.start();
                 activeOscillators = [oscL, oscR];
             } else if (currentAudioMode === 'pink') {
-                // Pink Noise Generation Buffer
                 const bufferSize = audioCtx.sampleRate * 2;
                 const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -246,7 +316,7 @@
                     b4 = 0.55000 * b4 + white * 0.5329522;
                     b5 = -0.7616 * b5 - white * 0.0168980;
                     data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                    data[i] *= 0.05;
+                    data[i] *= 0.04;
                     b6 = white * 0.115926;
                 }
                 const noise = audioCtx.createBufferSource();
@@ -266,85 +336,46 @@
             activeOscillators = [];
         }
 
-        // Start Protocol
-        function startLockInSession() {
-            const primary = document.getElementById('primaryTarget').value.trim() || 'Deep Focus Block';
-            const micro = document.getElementById('microAction').value.trim() || 'Execute Immediate Step';
-
-            document.getElementById('displayPrimary').innerText = `TARGET: ${primary.toUpperCase()}`;
-            document.getElementById('displayMicro').innerText = `ACTION: ${micro.toUpperCase()}`;
-
-            tabSwitchCount = 0;
-
-            // Zero Distraction Transition
-            setupState.classList.add('hidden');
-            navHeader.classList.add('opacity-0', 'pointer-events-none');
-            navFooter.classList.add('opacity-0', 'pointer-events-none');
-            activeState.classList.remove('hidden');
-
-            startAudioEngine();
-
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                updateDisplay();
-                if (timeRemaining <= 0) {
-                    terminateSession(true);
-                }
-            }, 1000);
-        }
-
-        // Tab Switch Accountability Tracking
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden && timerInterval) {
+            if (document.hidden && isRunning) {
                 tabSwitchCount++;
+                const quality = Math.max(50, (100 - (tabSwitchCount * 12))).toFixed(1);
+                document.getElementById('sessionQuality').innerText = `${quality}%`;
+                document.getElementById('qualitySubtext').innerText = `${tabSwitchCount} tab-switches detected`;
             }
         });
 
-        // Terminate / Complete Session
         function terminateSession(completed = false) {
             clearInterval(timerInterval);
             timerInterval = null;
+            isRunning = false;
             stopAudioEngine();
 
-            activeState.classList.add('hidden');
-
             if (completed) {
-                const yieldMultiplier = tabSwitchCount === 0 ? 1.5 : 1.0;
-                const earned = Math.floor((selectedDuration / 60) * 10 * yieldMultiplier);
-                points += earned;
+                const addedHours = (selectedDuration / 3600);
+                completedHours = Math.min(6.0, completedHours + addedHours);
+                totalPoints += Math.floor((selectedDuration / 60) * 10);
 
-                document.getElementById('userPoints').innerText = points.toLocaleString();
-                document.getElementById('earnedPoints').innerText = `+${earned}`;
-                document.getElementById('efficiencyScore').innerText = tabSwitchCount === 0 ? '100%' : `${Math.max(50, 100 - (tabSwitchCount * 15))}%`;
-
-                reviewState.classList.remove('hidden');
-            } else {
-                resetWorkspace();
+                document.getElementById('currentHours').innerText = completedHours.toFixed(1);
+                document.getElementById('targetProgressBar').style.width = `${(completedHours / 6.0) * 100}%`;
+                document.getElementById('userPoints').innerText = `${totalPoints.toLocaleString()} PTS`;
             }
-        }
 
-        // Reset Back to Setup
-        function resetWorkspace() {
+            // Restore Idle UI
+            heroBlock.classList.remove('opacity-30');
+            inputSetupBlock.classList.remove('hidden');
+            durationSelector.classList.remove('hidden');
+            audioSelector.classList.remove('hidden');
+            activeTaskDisplay.classList.add('hidden');
+            activeControls.classList.add('hidden');
+
+            statusText.innerText = "SYSTEM IDLE";
+            statusDot.className = "w-1.5 h-1.5 rounded-full bg-indigo-400";
+
             timeRemaining = selectedDuration;
             updateDisplay();
-            reviewState.classList.add('hidden');
-            activeState.classList.add('hidden');
-            setupState.classList.remove('hidden');
-            navHeader.classList.remove('opacity-0', 'pointer-events-none');
-            navFooter.classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        // Export Markdown Log for Notion/Anki Integration
-        function exportToNotion() {
-            const primary = document.getElementById('primaryTarget').value.trim() || 'Focus Session';
-            const durationMins = selectedDuration / 60;
-            const logText = `## Focus Session Log\n- **Target:** ${primary}\n- **Duration:** ${durationMins} mins\n- **Date:** ${new Date().toLocaleDateString()}\n- **Efficiency:** ${document.getElementById('efficiencyScore').innerText}\n- **Points Earned:** ${document.getElementById('earnedPoints').innerText}`;
-
-            navigator.clipboard.writeText(logText);
-            alert("Session Log copied to Clipboard in Markdown format!");
-        }
-
-        // Initialize Display
         updateDisplay();
     </script>
 </body>
