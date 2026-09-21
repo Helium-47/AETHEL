@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHEL // Focus Hub</title>
+    <title>AETHEL // Revision Hub</title>
+    
+    <!-- FAVICON (AE ICON IN BROWSER TAB) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%20%2220%22 fill=%22%23D6FF38%22/><text y=%22.9em%22 x=%2220%22 font-size=%2270%22 font-weight=%22bold%22 fill=%22black%22 font-family=%22sans-serif%22>Æ</text></svg>">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,7 +38,16 @@
         }
         .lime-glow { filter: drop-shadow(0 0 15px rgba(214, 255, 56, 0.25)); }
         .card-shadow { box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
-        .zen-active { background: #000000 !important; }
+        
+        /* HIDE SPINNER ARROWS ON NUMBER INPUT */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body class="min-h-screen w-screen text-slate-100 font-sans flex flex-col justify-between p-4 md:p-8 select-none">
@@ -47,93 +60,76 @@
             </div>
             <div>
                 <span class="font-bold tracking-tight text-white text-sm">AETHEL</span>
-                <span class="text-mutedText font-mono text-xs ml-1.5">// v2.4</span>
+                <span class="text-mutedText font-mono text-xs ml-1.5">// FOCUS PROTOCOL</span>
             </div>
         </div>
 
         <div class="flex items-center gap-3 font-mono text-xs">
             <div class="bg-darkCard border border-darkBorder px-3.5 py-1.5 rounded-xl text-slate-300 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-limeAccent"></span>
-                <span id="streakDisplay">14d streak</span>
-            </div>
-            <div class="bg-darkCard border border-darkBorder px-3.5 py-1.5 rounded-xl text-slate-300">
-                <span id="userXP">420 XP</span>
+                <span id="statusDot" class="w-2 h-2 rounded-full bg-limeAccent"></span>
+                <span id="statusText">Ready</span>
             </div>
         </div>
     </header>
 
-    <!-- MAIN DASHBOARD (LAPTOP / IPAD 2-COLUMN GRID) -->
-    <main id="mainContainer" class="w-full max-w-6xl mx-auto my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- MAIN DASHBOARD -->
+    <main class="w-full max-w-6xl mx-auto my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <!-- LEFT COLUMN: CLOCK & CONTROLS (7 COLS) -->
+        <!-- LEFT COLUMN: POMODORO CLOCK (7 COLS) -->
         <section class="lg:col-span-7 flex flex-col gap-5">
             
-            <!-- STATUS NOTIFICATION BANNER (MATCHES IMAGE 2) -->
-            <div id="statusBanner" class="bg-darkCard border border-darkBorder px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300">
-                <div class="flex items-center gap-2">
-                    <span id="statusDot" class="w-2 h-2 rounded-full bg-limeAccent animate-pulse"></span>
-                    <span class="text-mutedText uppercase text-[10px] tracking-wider">STATUS</span>
-                    <span id="statusText" class="font-bold text-white ml-1">Ready to Engage</span>
-                </div>
-                <div class="flex items-center gap-2 text-mutedText text-[11px]">
-                    <span id="tabWarningText">Focus Shield Standby</span>
-                    <svg class="w-4 h-4 text-mutedText" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 0112.728 0"></path></svg>
-                </div>
-            </div>
-
-            <!-- MAIN TIMER HERO CARD -->
             <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 md:p-8 card-shadow flex flex-col items-center justify-center relative">
                 
-                <div class="text-center mb-2">
-                    <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase bg-darkBg border border-darkBorder px-3 py-1 rounded-full">
-                        REVISION PROTOCOL // 04
-                    </span>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-white mt-2">DEEP SESSION</h1>
+                <!-- POMODORO MODE SWITCHER -->
+                <div class="flex items-center gap-2 bg-darkBg border border-darkBorder p-1 rounded-2xl mb-4 font-mono text-xs">
+                    <button id="modePomo" onclick="setMode('pomo')" class="px-4 py-1.5 rounded-xl bg-limeAccent text-black font-bold transition">Pomodoro (25m)</button>
+                    <button id="modeShort" onclick="setMode('short')" class="px-4 py-1.5 rounded-xl text-mutedText hover:text-white transition">Short Break (5m)</button>
+                    <button id="modeLong" onclick="setMode('long')" class="px-4 py-1.5 rounded-xl text-mutedText hover:text-white transition">Long Break (15m)</button>
                 </div>
 
-                <!-- CIRCULAR CLOCK -->
-                <div class="relative flex items-center justify-center my-4 cursor-pointer" onclick="toggleSession()">
-                    <svg class="w-[240px] h-[240px] md:w-[280px] md:h-[280px] transform -rotate-90 overflow-visible">
+                <!-- CIRCULAR CLOCK HERO -->
+                <div class="relative flex items-center justify-center my-2 cursor-pointer" onclick="toggleSession()">
+                    <svg class="w-[250px] h-[250px] md:w-[290px] md:h-[290px] transform -rotate-90 overflow-visible">
                         <circle cx="50%" cy="50%" r="42%" stroke="#1A1D26" stroke-width="8" fill="transparent" />
                         <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#D6FF38" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="lime-glow transition-all duration-1000 ease-linear" />
                     </svg>
 
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                         <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase mb-1">REMAINING</span>
                         <div id="timeReadout" class="text-5xl md:text-6xl font-mono font-bold tracking-tight text-white">
                             25:00
                         </div>
-                        <div id="subjectBadge" class="mt-3 text-xs font-mono text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-3 py-1 rounded-full font-semibold">
-                            ACTIVE SESSION
+                        <div id="subjectBadge" class="mt-3 text-xs font-mono text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-3 py-1 rounded-full font-semibold max-w-[200px] truncate">
+                            NO ACTIVE TASK
                         </div>
                     </div>
                 </div>
 
-                <!-- PRESET & CUSTOM DURATION ADJUSTER -->
-                <div class="w-full max-w-md flex flex-col gap-3 mt-2">
+                <!-- DURATION & CUSTOM ADJUSTER -->
+                <div class="w-full max-w-md flex flex-col gap-3 mt-4">
                     <div class="grid grid-cols-4 gap-2 font-mono text-xs">
-                        <button onclick="setMins(15)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">15m</button>
+                        <button onclick="setMins(15)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">15m</button>
                         <button onclick="setMins(25)" class="dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition">25m</button>
-                        <button onclick="setMins(45)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">45m</button>
-                        <button onclick="setMins(60)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">60m</button>
+                        <button onclick="setMins(45)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">45m</button>
+                        <button onclick="setMins(60)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">60m</button>
                     </div>
 
-                    <div class="flex items-center gap-2 bg-darkBg border border-darkBorder rounded-xl p-2 font-mono text-xs">
-                        <span class="text-mutedText pl-2">Custom Length (mins):</span>
-                        <input id="customMinsInput" type="number" min="1" max="180" value="25" class="w-16 bg-darkCard border border-darkBorder text-white text-center rounded-lg py-1 focus:outline-none focus:border-limeAccent">
-                        <button onclick="applyCustomMins()" class="ml-auto bg-darkCard border border-darkBorder text-slate-200 px-3 py-1 rounded-lg hover:text-white hover:border-slate-500 transition">Set</button>
+                    <div class="flex items-center justify-between bg-darkBg border border-darkBorder rounded-xl px-3 py-2 font-mono text-xs">
+                        <span class="text-mutedText">Custom Length (mins):</span>
+                        <div class="flex items-center gap-2">
+                            <input id="customMinsInput" type="number" min="1" max="180" value="25" class="w-16 bg-darkCard border border-darkBorder text-white text-center rounded-lg py-1 focus:outline-none focus:border-limeAccent font-mono">
+                            <button onclick="applyCustomMins()" class="bg-darkCard border border-darkBorder text-slate-200 px-3 py-1 rounded-lg hover:text-white hover:border-slate-500 transition">Set</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- CONTROLS & ZEN MODE TOGGLE -->
-                <div class="flex items-center gap-4 mt-6">
-                    <button id="actionBtn" onclick="toggleSession()" class="px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2">
-                        <span>INITIATE SESSION</span>
+                <!-- SESSION CONTROLS -->
+                <div class="flex items-center gap-3 mt-6">
+                    <button id="actionBtn" onclick="toggleSession()" class="px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95">
+                        START SESSION
                     </button>
-                    
-                    <button id="shieldBtn" onclick="toggleShield()" class="px-4 py-3 bg-darkBg border border-darkBorder text-mutedText hover:text-white rounded-2xl font-mono text-xs transition flex items-center gap-2" title="Lock screen & penalise tab switching">
-                        <span id="shieldIndicator" class="w-2 h-2 rounded-full bg-mutedText"></span>
-                        <span>Focus Shield</span>
+                    <button id="resetBtn" onclick="resetSession()" class="px-5 py-3 bg-darkBg border border-darkBorder text-mutedText hover:text-rose-400 rounded-2xl font-mono text-xs transition hidden">
+                        END / RESET
                     </button>
                 </div>
 
@@ -143,7 +139,7 @@
         <!-- RIGHT COLUMN: TASKS & SOUND ENGINE (5 COLS) -->
         <section class="lg:col-span-5 flex flex-col gap-5">
 
-            <!-- TASK MANAGER WITH INDIVIDUAL TIMERS -->
+            <!-- TASK MANAGER -->
             <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xs font-mono font-bold tracking-wider text-mutedText uppercase">TARGET TASK LIST</h2>
@@ -165,7 +161,7 @@
                 </div>
             </div>
 
-            <!-- SOUND ATMOSPHERE ENGINE -->
+            <!-- AUDIO ENGINE -->
             <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col gap-3">
                 <div class="flex items-center justify-between text-xs font-mono">
                     <span class="text-mutedText uppercase font-bold tracking-wider">AUDIO ENGINE</span>
@@ -180,15 +176,15 @@
                 </div>
             </div>
 
-            <!-- SESSION LOG STATS -->
-            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow grid grid-cols-2 gap-4 font-mono">
-                <div>
+            <!-- CLEAN METRICS -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-5 card-shadow grid grid-cols-2 gap-4 font-mono">
+                <div class="flex flex-col justify-center">
                     <div class="text-[10px] text-mutedText uppercase tracking-wider">COMPLETED TASKS</div>
-                    <div id="completedTasksCount" class="text-2xl font-bold text-white mt-1">0</div>
+                    <div id="completedTasksCount" class="text-xl font-bold text-white mt-1">0</div>
                 </div>
-                <div>
+                <div class="flex flex-col justify-center border-l border-darkBorder pl-4">
                     <div class="text-[10px] text-mutedText uppercase tracking-wider">TOTAL FOCUS TIME</div>
-                    <div id="totalFocusTime" class="text-2xl font-bold text-limeAccent mt-1">0m</div>
+                    <div id="totalFocusTime" class="text-xl font-bold text-limeAccent mt-1">0m</div>
                 </div>
             </div>
 
@@ -207,45 +203,36 @@
         let timeRemaining = duration;
         let timer = null;
         let isRunning = false;
-        let shieldActive = false;
         let soundMode = 'binaural';
         let audioCtx = null;
         let activeNodes = [];
         let tasks = [];
         let completedCount = 0;
         let totalSecondsFocused = 0;
-        let xp = 420;
+        let activeTaskTitle = "";
 
         const timeReadout = document.getElementById('timeReadout');
         const timerProgress = document.getElementById('timerProgress');
         const actionBtn = document.getElementById('actionBtn');
-        const statusBanner = document.getElementById('statusBanner');
+        const resetBtn = document.getElementById('resetBtn');
         const statusText = document.getElementById('statusText');
         const statusDot = document.getElementById('statusDot');
-        const tabWarningText = document.getElementById('tabWarningText');
 
-        // TAB SWITCH / DISTRACTION DETECTION
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && isRunning && shieldActive) {
-                xp = Math.max(0, xp - 20);
-                document.getElementById('userXP').innerText = `${xp} XP`;
-                tabWarningText.innerText = "WARNING: Tab left! -20 XP";
-                tabWarningText.classList.add("text-rose-400");
-            }
-        });
+        function setMode(mode) {
+            if (isRunning) return;
+            document.getElementById('modePomo').className = "px-4 py-1.5 rounded-xl text-mutedText hover:text-white transition";
+            document.getElementById('modeShort').className = "px-4 py-1.5 rounded-xl text-mutedText hover:text-white transition";
+            document.getElementById('modeLong').className = "px-4 py-1.5 rounded-xl text-mutedText hover:text-white transition";
 
-        function toggleShield() {
-            shieldActive = !shieldActive;
-            const btn = document.getElementById('shieldBtn');
-            const ind = document.getElementById('shieldIndicator');
-            if (shieldActive) {
-                btn.className = "px-4 py-3 bg-limeAccent/10 border border-limeAccent text-limeAccent rounded-2xl font-mono text-xs transition flex items-center gap-2";
-                ind.className = "w-2 h-2 rounded-full bg-limeAccent animate-ping";
-                tabWarningText.innerText = "Shield Active (Strict)";
-            } else {
-                btn.className = "px-4 py-3 bg-darkBg border border-darkBorder text-mutedText hover:text-white rounded-2xl font-mono text-xs transition flex items-center gap-2";
-                ind.className = "w-2 h-2 rounded-full bg-mutedText";
-                tabWarningText.innerText = "Focus Shield Standby";
+            if (mode === 'pomo') {
+                document.getElementById('modePomo').className = "px-4 py-1.5 rounded-xl bg-limeAccent text-black font-bold transition";
+                setMins(25);
+            } else if (mode === 'short') {
+                document.getElementById('modeShort').className = "px-4 py-1.5 rounded-xl bg-limeAccent text-black font-bold transition";
+                setMins(5);
+            } else if (mode === 'long') {
+                document.getElementById('modeLong').className = "px-4 py-1.5 rounded-xl bg-limeAccent text-black font-bold transition";
+                setMins(15);
             }
         }
 
@@ -274,17 +261,17 @@
         }
 
         function toggleSession() {
-            if (isRunning) { stopSession(); } else { startSession(); }
+            if (isRunning) { pauseSession(); } else { startSession(); }
         }
 
         function startSession() {
             isRunning = true;
-            actionBtn.innerHTML = `<span>PAUSE SESSION</span>`;
-            actionBtn.className = "px-8 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2";
-            
-            statusText.innerText = "Session Active";
-            statusDot.className = "w-2 h-2 rounded-full bg-limeAccent animate-ping";
-            statusBanner.className = "bg-darkCard border border-limeAccent/40 px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300";
+            actionBtn.innerText = "PAUSE";
+            actionBtn.className = "px-8 py-3 bg-amber-400 hover:bg-amber-500 text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95";
+            resetBtn.classList.remove('hidden');
+
+            statusText.innerText = "Active";
+            statusDot.className = "w-2 h-2 rounded-full bg-limeAccent animate-pulse";
 
             startAudio();
 
@@ -300,28 +287,37 @@
             }, 1000);
         }
 
-        function stopSession() {
+        function pauseSession() {
             clearInterval(timer);
             timer = null;
             isRunning = false;
             stopAudio();
 
-            actionBtn.innerHTML = `<span>RESUME SESSION</span>`;
-            actionBtn.className = "px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2";
-            
+            actionBtn.innerText = "RESUME";
+            actionBtn.className = "px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95";
             statusText.innerText = "Paused";
             statusDot.className = "w-2 h-2 rounded-full bg-amber-400";
-            statusBanner.className = "bg-darkCard border border-darkBorder px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300";
+        }
+
+        function resetSession() {
+            clearInterval(timer);
+            timer = null;
+            isRunning = false;
+            stopAudio();
+
+            timeRemaining = duration;
+            updateGauge();
+
+            actionBtn.innerText = "START SESSION";
+            actionBtn.className = "px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95";
+            resetBtn.classList.add('hidden');
+            statusText.innerText = "Ready";
+            statusDot.className = "w-2 h-2 rounded-full bg-limeAccent";
         }
 
         function completeSession() {
-            stopSession();
-            xp += 50;
-            document.getElementById('userXP').innerText = `${xp} XP`;
-            statusText.innerText = "Session Complete (+50 XP)";
-            actionBtn.innerHTML = `<span>START NEW SESSION</span>`;
-            timeRemaining = duration;
-            updateGauge();
+            resetSession();
+            statusText.innerText = "Completed";
         }
 
         function updateStats() {
@@ -329,7 +325,7 @@
             document.getElementById('totalFocusTime').innerText = `${mins}m`;
         }
 
-        // TASK SYSTEM WITH TIMERS
+        // TASK SYSTEM
         function addTask() {
             const txt = document.getElementById('newTaskInput').value.trim();
             const mins = parseInt(document.getElementById('newTaskTime').value) || 25;
@@ -345,6 +341,7 @@
         function loadTaskToTimer(taskMins, title) {
             if (isRunning) return;
             setMins(taskMins);
+            activeTaskTitle = title;
             document.getElementById('subjectBadge').innerText = title.toUpperCase();
         }
 
@@ -372,19 +369,19 @@
 
             tasks.forEach(t => {
                 const card = document.createElement('div');
-                card.className = `p-3 rounded-2xl border ${t.done ? 'bg-darkBg/40 border-darkBorder opacity-50' : 'bg-darkBg border-darkBorder'} flex items-center justify-between gap-2 transition`;
+                card.className = `p-3 rounded-2xl border ${t.done ? 'bg-darkBg/40 border-darkBorder opacity-50' : 'bg-darkBg border-darkBorder'} flex items-center justify-between gap-3 w-full transition`;
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-2.5 overflow-hidden">
-                        <button onclick="toggleTaskDone(${t.id})" class="w-4 h-4 rounded-md border ${t.done ? 'bg-limeAccent border-limeAccent' : 'border-darkBorder'} flex items-center justify-center text-black font-bold text-[10px]">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                        <button onclick="toggleTaskDone(${t.id})" class="w-4 h-4 rounded-md border shrink-0 ${t.done ? 'bg-limeAccent border-limeAccent' : 'border-darkBorder'} flex items-center justify-center text-black font-bold text-[10px]">
                             ${t.done ? '✓' : ''}
                         </button>
                         <span class="text-xs text-white truncate ${t.done ? 'line-through text-mutedText' : ''}">${t.title}</span>
                     </div>
-                    <div class="flex items-center gap-1.5 font-mono text-[10px]">
+                    <div class="flex items-center gap-2 font-mono text-[10px] shrink-0">
                         <span class="text-mutedText">${t.durationMins}m</span>
-                        <button onclick="loadTaskToTimer(${t.durationMins}, '${t.title.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-darkCard border border-darkBorder hover:border-limeAccent/50 text-limeAccent rounded-lg transition">Focus</button>
-                        <button onclick="deleteTask(${t.id})" class="text-mutedText hover:text-rose-400 px-1">✕</button>
+                        <button onclick="loadTaskToTimer(${t.durationMins}, '${t.title.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-darkCard border border-darkBorder hover:border-limeAccent/50 text-limeAccent rounded-lg transition font-semibold">Focus</button>
+                        <button onclick="deleteTask(${t.id})" class="text-mutedText hover:text-rose-400 px-1 text-xs">✕</button>
                     </div>
                 `;
                 list.appendChild(card);
