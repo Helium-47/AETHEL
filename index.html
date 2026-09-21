@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#0D0E12] text-slate-100 antialiased selection:bg-[#D6FF38] selection:text-black">
+<html lang="en" class="h-full bg-[#090A0D] text-slate-100 antialiased selection:bg-[#D6FF38] selection:text-black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHEL // Technical Dark Focus</title>
+    <title>AETHEL // Focus Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0D0E12',
-                        darkCard: '#16181E',
-                        darkCardHover: '#1E212A',
-                        darkBorder: '#262933',
+                        darkBg: '#090A0D',
+                        darkCard: '#12141A',
+                        darkCardHover: '#1A1D26',
+                        darkBorder: '#222630',
                         limeAccent: '#D6FF38',
-                        limeGlow: 'rgba(214, 255, 56, 0.15)',
-                        mutedText: '#858B99',
+                        mutedText: '#717784',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', '-apple-system', 'sans-serif'],
@@ -29,203 +28,241 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #0D0E12;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-color: #090A0D;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 24px 24px;
         }
-        .lime-shadow { filter: drop-shadow(0 0 20px rgba(214, 255, 56, 0.25)); }
-        .card-shadow { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .lime-glow { filter: drop-shadow(0 0 15px rgba(214, 255, 56, 0.25)); }
+        .card-shadow { box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        .zen-active { background: #000000 !important; }
     </style>
 </head>
-<body class="min-h-screen w-screen text-slate-100 font-sans flex flex-col justify-between items-center p-4 md:p-8 relative overflow-x-hidden">
+<body class="min-h-screen w-screen text-slate-100 font-sans flex flex-col justify-between p-4 md:p-8 select-none">
 
-    <!-- TOP HEADER -->
-    <header class="w-full max-w-xl flex items-center justify-between z-20 mb-4">
+    <!-- TOP BAR -->
+    <header class="w-full max-w-6xl mx-auto flex items-center justify-between pb-6 border-b border-darkBorder/60">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-limeAccent text-black flex items-center justify-center font-bold text-xs shadow-md">
+            <div class="w-8 h-8 rounded-xl bg-limeAccent text-black flex items-center justify-center font-bold text-xs shadow-lg">
                 Æ
             </div>
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="font-bold tracking-tight text-white text-sm">AETHEL</span>
-                    <span class="text-[10px] font-mono text-mutedText">/ v2.4</span>
-                </div>
-                <div class="text-[10px] font-mono text-limeAccent flex items-center gap-1.5 mt-0.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-limeAccent animate-pulse"></span>
-                    <span>STATUS: Locked In</span>
-                </div>
+                <span class="font-bold tracking-tight text-white text-sm">AETHEL</span>
+                <span class="text-mutedText font-mono text-xs ml-1.5">// v2.4</span>
             </div>
         </div>
 
-        <div class="flex items-center gap-2 font-mono text-xs">
-            <div class="bg-darkCard border border-darkBorder px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-                <span class="text-limeAccent">🔥</span>
-                <span class="font-bold">14d streak</span>
+        <div class="flex items-center gap-3 font-mono text-xs">
+            <div class="bg-darkCard border border-darkBorder px-3.5 py-1.5 rounded-xl text-slate-300 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-limeAccent"></span>
+                <span id="streakDisplay">14d streak</span>
             </div>
-            <div class="bg-darkCard border border-darkBorder px-3 py-1.5 rounded-xl text-mutedText">
-                <span id="userXP" class="text-white font-bold">420 XP</span>
+            <div class="bg-darkCard border border-darkBorder px-3.5 py-1.5 rounded-xl text-slate-300">
+                <span id="userXP">420 XP</span>
             </div>
         </div>
     </header>
 
-    <!-- MAIN INTERFACE CONTAINER -->
-    <main class="w-full max-w-xl flex flex-col gap-4 z-10 my-auto">
-        
-        <!-- PROTOCOL BADGE -->
-        <div class="text-center">
-            <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase bg-darkCard border border-darkBorder px-3 py-1 rounded-full">
-                REVISION PROTOCOL // 04
-            </span>
-            <h1 class="text-2xl font-bold tracking-tight text-white mt-2">DEEP SESSION</h1>
-            <p class="text-xs text-mutedText">Pure signal. Zero friction.</p>
-        </div>
+    <!-- MAIN DASHBOARD (LAPTOP / IPAD 2-COLUMN GRID) -->
+    <main id="mainContainer" class="w-full max-w-6xl mx-auto my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <!-- CLOCK HERO DISPLAY -->
-        <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col items-center relative overflow-hidden">
+        <!-- LEFT COLUMN: CLOCK & CONTROLS (7 COLS) -->
+        <section class="lg:col-span-7 flex flex-col gap-5">
             
-            <div class="relative flex items-center justify-center cursor-pointer my-2" onclick="toggleSession()">
-                <svg class="w-[260px] h-[260px] transform -rotate-90 overflow-visible" id="svgGauge">
-                    <circle cx="50%" cy="50%" r="42%" stroke="#262933" stroke-width="6" fill="transparent" />
-                    <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#D6FF38" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="lime-shadow transition-all duration-1000 ease-linear" />
-                </svg>
-
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                    <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase mb-1">● REMAINING</span>
-                    <div id="timeReadout" class="text-5xl font-mono font-bold tracking-tight text-white">
-                        25:00
-                    </div>
-                    <div id="subjectBadge" class="mt-2 text-[11px] font-mono text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-3 py-0.5 rounded-full font-semibold">
-                        ● PHYSICS // PAPER 1
-                    </div>
+            <!-- STATUS NOTIFICATION BANNER (MATCHES IMAGE 2) -->
+            <div id="statusBanner" class="bg-darkCard border border-darkBorder px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300">
+                <div class="flex items-center gap-2">
+                    <span id="statusDot" class="w-2 h-2 rounded-full bg-limeAccent animate-pulse"></span>
+                    <span class="text-mutedText uppercase text-[10px] tracking-wider">STATUS</span>
+                    <span id="statusText" class="font-bold text-white ml-1">Ready to Engage</span>
+                </div>
+                <div class="flex items-center gap-2 text-mutedText text-[11px]">
+                    <span id="tabWarningText">Focus Shield Standby</span>
+                    <svg class="w-4 h-4 text-mutedText" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 0112.728 0"></path></svg>
                 </div>
             </div>
 
-            <!-- TIME SELECTOR PILLS -->
-            <div class="grid grid-cols-4 gap-2 w-full max-w-md mt-4 font-mono text-xs">
-                <button onclick="setMins(15)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">15m</button>
-                <button onclick="setMins(25)" class="dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition shadow-sm">25m</button>
-                <button onclick="setMins(45)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">45m</button>
-                <button onclick="setMins(60)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">60m</button>
+            <!-- MAIN TIMER HERO CARD -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 md:p-8 card-shadow flex flex-col items-center justify-center relative">
+                
+                <div class="text-center mb-2">
+                    <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase bg-darkBg border border-darkBorder px-3 py-1 rounded-full">
+                        REVISION PROTOCOL // 04
+                    </span>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white mt-2">DEEP SESSION</h1>
+                </div>
+
+                <!-- CIRCULAR CLOCK -->
+                <div class="relative flex items-center justify-center my-4 cursor-pointer" onclick="toggleSession()">
+                    <svg class="w-[240px] h-[240px] md:w-[280px] md:h-[280px] transform -rotate-90 overflow-visible">
+                        <circle cx="50%" cy="50%" r="42%" stroke="#1A1D26" stroke-width="8" fill="transparent" />
+                        <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#D6FF38" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="lime-glow transition-all duration-1000 ease-linear" />
+                    </svg>
+
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase mb-1">REMAINING</span>
+                        <div id="timeReadout" class="text-5xl md:text-6xl font-mono font-bold tracking-tight text-white">
+                            25:00
+                        </div>
+                        <div id="subjectBadge" class="mt-3 text-xs font-mono text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-3 py-1 rounded-full font-semibold">
+                            ACTIVE SESSION
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRESET & CUSTOM DURATION ADJUSTER -->
+                <div class="w-full max-w-md flex flex-col gap-3 mt-2">
+                    <div class="grid grid-cols-4 gap-2 font-mono text-xs">
+                        <button onclick="setMins(15)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">15m</button>
+                        <button onclick="setMins(25)" class="dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition">25m</button>
+                        <button onclick="setMins(45)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">45m</button>
+                        <button onclick="setMins(60)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:border-slate-600 transition">60m</button>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-darkBg border border-darkBorder rounded-xl p-2 font-mono text-xs">
+                        <span class="text-mutedText pl-2">Custom Length (mins):</span>
+                        <input id="customMinsInput" type="number" min="1" max="180" value="25" class="w-16 bg-darkCard border border-darkBorder text-white text-center rounded-lg py-1 focus:outline-none focus:border-limeAccent">
+                        <button onclick="applyCustomMins()" class="ml-auto bg-darkCard border border-darkBorder text-slate-200 px-3 py-1 rounded-lg hover:text-white hover:border-slate-500 transition">Set</button>
+                    </div>
+                </div>
+
+                <!-- CONTROLS & ZEN MODE TOGGLE -->
+                <div class="flex items-center gap-4 mt-6">
+                    <button id="actionBtn" onclick="toggleSession()" class="px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2">
+                        <span>INITIATE SESSION</span>
+                    </button>
+                    
+                    <button id="shieldBtn" onclick="toggleShield()" class="px-4 py-3 bg-darkBg border border-darkBorder text-mutedText hover:text-white rounded-2xl font-mono text-xs transition flex items-center gap-2" title="Lock screen & penalise tab switching">
+                        <span id="shieldIndicator" class="w-2 h-2 rounded-full bg-mutedText"></span>
+                        <span>Focus Shield</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: TASKS & SOUND ENGINE (5 COLS) -->
+        <section class="lg:col-span-5 flex flex-col gap-5">
+
+            <!-- TASK MANAGER WITH INDIVIDUAL TIMERS -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-mutedText uppercase">TARGET TASK LIST</h2>
+                    <span id="taskCount" class="text-xs font-mono text-limeAccent bg-limeAccent/10 px-2 py-0.5 rounded-md">0 Tasks</span>
+                </div>
+
+                <!-- ADD TASK INPUT -->
+                <div class="flex flex-col gap-2">
+                    <input id="newTaskInput" type="text" placeholder="Task description..." class="w-full bg-darkBg border border-darkBorder rounded-xl px-3.5 py-2 text-xs text-white placeholder-mutedText focus:outline-none focus:border-limeAccent">
+                    <div class="flex items-center gap-2">
+                        <input id="newTaskTime" type="number" min="1" max="180" placeholder="Mins (e.g. 30)" class="w-28 bg-darkBg border border-darkBorder rounded-xl px-3 py-1.5 text-xs text-white placeholder-mutedText font-mono focus:outline-none focus:border-limeAccent">
+                        <button onclick="addTask()" class="flex-1 bg-white hover:bg-slate-200 text-black font-bold py-1.5 rounded-xl text-xs font-mono transition">+ ADD TASK</button>
+                    </div>
+                </div>
+
+                <!-- TASKS CONTAINER -->
+                <div id="taskList" class="flex flex-col gap-2 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- Tasks inserted dynamically -->
+                </div>
             </div>
 
-        </div>
+            <!-- SOUND ATMOSPHERE ENGINE -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col gap-3">
+                <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="text-mutedText uppercase font-bold tracking-wider">AUDIO ENGINE</span>
+                    <span id="activeSoundLabel" class="text-limeAccent font-bold">16Hz Beta Wave</span>
+                </div>
 
-        <!-- ACTIVE MODULE & TOPIC TARGET -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
-            <div class="flex items-center justify-between text-[10px] font-mono text-mutedText mb-1">
-                <span>● ACTIVE MODULE</span>
-                <span class="text-slate-400">PART 2/4 · MECHANICS</span>
+                <div class="grid grid-cols-4 gap-2 font-mono text-xs mt-1">
+                    <button id="sndBeta" onclick="setSound('binaural', '16Hz Beta Wave')" class="snd-btn py-2 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition">16Hz</button>
+                    <button id="sndRain" onclick="setSound('rain', 'Rainfall Ambient')" class="snd-btn py-2 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Rain</button>
+                    <button id="sndPink" onclick="setSound('pink', 'Deep Noise')" class="snd-btn py-2 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Noise</button>
+                    <button id="sndOff" onclick="setSound('none', 'Audio Muted')" class="snd-btn py-2 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Off</button>
+                </div>
             </div>
-            <input id="primaryTarget" type="text" value="Newtonian Mechanics & Momentum Conservation" class="w-full bg-transparent text-sm font-bold text-white focus:outline-none focus:border-b focus:border-limeAccent pb-1">
-        </div>
 
-        <!-- AUDITORY ENGINE CONTROLS -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow flex flex-col gap-3">
-            <div class="flex items-center justify-between text-[10px] font-mono text-mutedText">
-                <span id="activeSoundLabel">Binaural 16Hz</span>
-                <span class="text-limeAccent">LOW ALPHA FOCUS</span>
+            <!-- SESSION LOG STATS -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow grid grid-cols-2 gap-4 font-mono">
+                <div>
+                    <div class="text-[10px] text-mutedText uppercase tracking-wider">COMPLETED TASKS</div>
+                    <div id="completedTasksCount" class="text-2xl font-bold text-white mt-1">0</div>
+                </div>
+                <div>
+                    <div class="text-[10px] text-mutedText uppercase tracking-wider">TOTAL FOCUS TIME</div>
+                    <div id="totalFocusTime" class="text-2xl font-bold text-limeAccent mt-1">0m</div>
+                </div>
             </div>
-            <div class="grid grid-cols-4 gap-2 font-mono text-xs">
-                <button id="sndOff" onclick="setSound('none', 'Off', 'MUTED')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Off</button>
-                <button id="sndBeta" onclick="setSound('binaural', 'Binaural 16Hz', 'LOW ALPHA FOCUS')" class="snd-btn py-2 rounded-xl bg-slate-800 text-limeAccent font-bold border border-limeAccent/30 transition">16Hz</button>
-                <button id="sndRain" onclick="setSound('rain', 'Rain Ambient', 'ATMOSPHERIC')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Rain</button>
-                <button id="sndPink" onclick="setSound('pink', 'Pink Noise', 'DEEP ISOLATION')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Pink</button>
-            </div>
-        </div>
 
-        <!-- DAILY METRICS DUAL CARD -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
-                <div class="text-[10px] font-mono text-mutedText uppercase">DAILY OUTPUT</div>
-                <div class="text-lg font-bold font-mono text-white mt-1">3.8h <span class="text-xs text-mutedText">/ 4.5h</span></div>
-                <div class="text-[10px] font-mono text-limeAccent mt-1">84% target reached</div>
-            </div>
-            <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
-                <div class="text-[10px] font-mono text-mutedText uppercase">CONSISTENCY</div>
-                <div class="text-lg font-bold font-mono text-white mt-1">14 <span class="text-xs text-mutedText">Days</span></div>
-                <div class="text-[10px] font-mono text-mutedText mt-1">Top 5% student pace</div>
-            </div>
-        </div>
-
-        <!-- EXECUTION DOCK BAR -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-3 card-shadow flex items-center justify-between">
-            <button onclick="toggleDrawer('tasksDrawer')" class="p-3 text-mutedText hover:text-white transition" title="Focus Tasks">
-                📋
-            </button>
-
-            <!-- MAIN PLAY/PAUSE TRIGGER -->
-            <button id="actionBtn" onclick="toggleSession()" class="w-14 h-14 bg-limeAccent hover:bg-lime-400 text-black rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg shadow-limeAccent/20 transition transform active:scale-95">
-                ▶
-            </button>
-
-            <button onclick="toggleDrawer('analyticsDrawer')" class="p-3 text-mutedText hover:text-white transition" title="Analytics">
-                📊
-            </button>
-        </div>
+        </section>
 
     </main>
 
-    <!-- DRAWER 1: TASKS -->
-    <aside id="tasksDrawer" class="fixed top-0 left-0 h-full w-80 bg-darkCard border-r border-darkBorder shadow-2xl z-30 transform -translate-x-full transition-transform duration-300 flex flex-col p-6">
-        <div class="flex items-center justify-between pb-4 border-b border-darkBorder">
-            <span class="font-bold text-sm text-white">REVISION TASKS</span>
-            <button onclick="toggleDrawer('tasksDrawer')" class="text-mutedText hover:text-white">✕</button>
-        </div>
-        <div class="mt-4 flex gap-2">
-            <input id="newTaskInput" type="text" placeholder="Add revision task..." class="flex-1 bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-limeAccent">
-            <button onclick="addTask()" class="bg-limeAccent text-black px-4 py-2 rounded-xl font-bold text-xs">+</button>
-        </div>
-        <div id="taskList" class="mt-4 flex-1 overflow-y-auto flex flex-col gap-2"></div>
-    </aside>
+    <!-- FOOTER -->
+    <footer class="w-full max-w-6xl mx-auto pt-6 border-t border-darkBorder/60 flex items-center justify-between font-mono text-[11px] text-mutedText">
+        <span>AETHEL PROTOCOL</span>
+        <span>ZERO DISTRACTION INTERFACE</span>
+    </footer>
 
-    <!-- DRAWER 2: ANALYTICS -->
-    <aside id="analyticsDrawer" class="fixed top-0 right-0 h-full w-80 bg-darkCard border-l border-darkBorder shadow-2xl z-30 transform translate-x-full transition-transform duration-300 flex flex-col p-6">
-        <div class="flex items-center justify-between pb-4 border-b border-darkBorder">
-            <span class="font-bold text-sm text-white">ANALYTICS SUMMARY</span>
-            <button onclick="toggleDrawer('analyticsDrawer')" class="text-mutedText hover:text-white">✕</button>
-        </div>
-        <div class="mt-6 space-y-4">
-            <div class="p-4 bg-darkBg border border-darkBorder rounded-2xl">
-                <div class="text-[10px] font-mono text-mutedText">FOCUS EFFICIENCY</div>
-                <div class="text-2xl font-bold font-mono text-limeAccent mt-1">98.4%</div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- JS ENGINE -->
     <script>
         let duration = 25 * 60;
         let timeRemaining = duration;
         let timer = null;
         let isRunning = false;
+        let shieldActive = false;
+        let soundMode = 'binaural';
         let audioCtx = null;
         let activeNodes = [];
-        let soundMode = 'binaural';
         let tasks = [];
+        let completedCount = 0;
+        let totalSecondsFocused = 0;
+        let xp = 420;
 
         const timeReadout = document.getElementById('timeReadout');
         const timerProgress = document.getElementById('timerProgress');
         const actionBtn = document.getElementById('actionBtn');
+        const statusBanner = document.getElementById('statusBanner');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const tabWarningText = document.getElementById('tabWarningText');
 
-        function toggleDrawer(id) {
-            document.getElementById(id).classList.toggle(id === 'tasksDrawer' ? '-translate-x-full' : 'translate-x-full');
+        // TAB SWITCH / DISTRACTION DETECTION
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isRunning && shieldActive) {
+                xp = Math.max(0, xp - 20);
+                document.getElementById('userXP').innerText = `${xp} XP`;
+                tabWarningText.innerText = "WARNING: Tab left! -20 XP";
+                tabWarningText.classList.add("text-rose-400");
+            }
+        });
+
+        function toggleShield() {
+            shieldActive = !shieldActive;
+            const btn = document.getElementById('shieldBtn');
+            const ind = document.getElementById('shieldIndicator');
+            if (shieldActive) {
+                btn.className = "px-4 py-3 bg-limeAccent/10 border border-limeAccent text-limeAccent rounded-2xl font-mono text-xs transition flex items-center gap-2";
+                ind.className = "w-2 h-2 rounded-full bg-limeAccent animate-ping";
+                tabWarningText.innerText = "Shield Active (Strict)";
+            } else {
+                btn.className = "px-4 py-3 bg-darkBg border border-darkBorder text-mutedText hover:text-white rounded-2xl font-mono text-xs transition flex items-center gap-2";
+                ind.className = "w-2 h-2 rounded-full bg-mutedText";
+                tabWarningText.innerText = "Focus Shield Standby";
+            }
         }
 
         function setMins(m) {
             if (isRunning) return;
             duration = m * 60;
             timeRemaining = duration;
-            document.querySelectorAll('.dur-btn').forEach(b => b.className = "dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition");
-            event.currentTarget.className = "dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition shadow-sm";
+            document.getElementById('customMinsInput').value = m;
             updateGauge();
         }
 
-        function setSound(mode, label, sub) {
-            soundMode = mode;
-            document.getElementById('activeSoundLabel').innerText = label;
-            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition");
-            event.currentTarget.className = "snd-btn py-2 rounded-xl bg-slate-800 text-limeAccent font-bold border border-limeAccent/30 transition";
-            if (isRunning) { stopAudio(); startAudio(); }
+        function applyCustomMins() {
+            if (isRunning) return;
+            const val = parseInt(document.getElementById('customMinsInput').value);
+            if (val && val > 0) {
+                setMins(val);
+            }
         }
 
         function updateGauge() {
@@ -237,54 +274,130 @@
         }
 
         function toggleSession() {
-            if (isRunning) { stopSession(false); } else { startSession(); }
+            if (isRunning) { stopSession(); } else { startSession(); }
         }
 
         function startSession() {
             isRunning = true;
-            actionBtn.innerText = "❚❚";
-            actionBtn.className = "w-14 h-14 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg transition transform active:scale-95";
+            actionBtn.innerHTML = `<span>PAUSE SESSION</span>`;
+            actionBtn.className = "px-8 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2";
+            
+            statusText.innerText = "Session Active";
+            statusDot.className = "w-2 h-2 rounded-full bg-limeAccent animate-ping";
+            statusBanner.className = "bg-darkCard border border-limeAccent/40 px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300";
+
             startAudio();
+
             timer = setInterval(() => {
                 timeRemaining--;
+                totalSecondsFocused++;
                 updateGauge();
-                if (timeRemaining <= 0) stopSession(true);
+                updateStats();
+
+                if (timeRemaining <= 0) {
+                    completeSession();
+                }
             }, 1000);
         }
 
-        function stopSession(completed) {
+        function stopSession() {
             clearInterval(timer);
             timer = null;
             isRunning = false;
             stopAudio();
-            actionBtn.innerText = "▶";
-            actionBtn.className = "w-14 h-14 bg-limeAccent hover:bg-lime-400 text-black rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg shadow-limeAccent/20 transition transform active:scale-95";
+
+            actionBtn.innerHTML = `<span>RESUME SESSION</span>`;
+            actionBtn.className = "px-8 py-3 bg-limeAccent hover:bg-[#c2ed2e] text-black font-bold rounded-2xl font-mono text-sm tracking-wide shadow-lg transition transform active:scale-95 flex items-center gap-2";
+            
+            statusText.innerText = "Paused";
+            statusDot.className = "w-2 h-2 rounded-full bg-amber-400";
+            statusBanner.className = "bg-darkCard border border-darkBorder px-4 py-2.5 rounded-2xl flex items-center justify-between font-mono text-xs transition-all duration-300";
+        }
+
+        function completeSession() {
+            stopSession();
+            xp += 50;
+            document.getElementById('userXP').innerText = `${xp} XP`;
+            statusText.innerText = "Session Complete (+50 XP)";
+            actionBtn.innerHTML = `<span>START NEW SESSION</span>`;
             timeRemaining = duration;
             updateGauge();
         }
 
+        function updateStats() {
+            const mins = Math.floor(totalSecondsFocused / 60);
+            document.getElementById('totalFocusTime').innerText = `${mins}m`;
+        }
+
+        // TASK SYSTEM WITH TIMERS
         function addTask() {
-            const input = document.getElementById('newTaskInput');
-            if (!input.value.trim()) return;
-            tasks.push({ id: Date.now(), text: input.value.trim(), done: false });
-            input.value = '';
+            const txt = document.getElementById('newTaskInput').value.trim();
+            const mins = parseInt(document.getElementById('newTaskTime').value) || 25;
+            if (!txt) return;
+
+            const task = { id: Date.now(), title: txt, durationMins: mins, done: false };
+            tasks.push(task);
+            document.getElementById('newTaskInput').value = '';
+            document.getElementById('newTaskTime').value = '';
             renderTasks();
         }
 
-        function toggleTask(id) {
-            tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+        function loadTaskToTimer(taskMins, title) {
+            if (isRunning) return;
+            setMins(taskMins);
+            document.getElementById('subjectBadge').innerText = title.toUpperCase();
+        }
+
+        function toggleTaskDone(id) {
+            tasks = tasks.map(t => {
+                if (t.id === id) {
+                    if (!t.done) completedCount++; else completedCount--;
+                    return { ...t, done: !t.done };
+                }
+                return t;
+            });
+            document.getElementById('completedTasksCount').innerText = completedCount;
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
             renderTasks();
         }
 
         function renderTasks() {
             const list = document.getElementById('taskList');
             list.innerHTML = '';
-            tasks.forEach(task => {
-                const item = document.createElement('div');
-                item.className = `p-3 rounded-xl border text-xs flex justify-between items-center ${task.done ? 'bg-darkBg border-darkBorder text-mutedText line-through' : 'bg-darkBg border-darkBorder text-white'}`;
-                item.innerHTML = `<span onclick="toggleTask(${task.id})" class="cursor-pointer flex-1">${task.text}</span>`;
-                list.appendChild(item);
+            document.getElementById('taskCount').innerText = `${tasks.length} Tasks`;
+
+            tasks.forEach(t => {
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-2xl border ${t.done ? 'bg-darkBg/40 border-darkBorder opacity-50' : 'bg-darkBg border-darkBorder'} flex items-center justify-between gap-2 transition`;
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                        <button onclick="toggleTaskDone(${t.id})" class="w-4 h-4 rounded-md border ${t.done ? 'bg-limeAccent border-limeAccent' : 'border-darkBorder'} flex items-center justify-center text-black font-bold text-[10px]">
+                            ${t.done ? '✓' : ''}
+                        </button>
+                        <span class="text-xs text-white truncate ${t.done ? 'line-through text-mutedText' : ''}">${t.title}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 font-mono text-[10px]">
+                        <span class="text-mutedText">${t.durationMins}m</span>
+                        <button onclick="loadTaskToTimer(${t.durationMins}, '${t.title.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-darkCard border border-darkBorder hover:border-limeAccent/50 text-limeAccent rounded-lg transition">Focus</button>
+                        <button onclick="deleteTask(${t.id})" class="text-mutedText hover:text-rose-400 px-1">✕</button>
+                    </div>
+                `;
+                list.appendChild(card);
             });
+        }
+
+        // AUDIO GENERATOR
+        function setSound(mode, label) {
+            soundMode = mode;
+            document.getElementById('activeSoundLabel').innerText = label;
+            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn py-2 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition");
+            event.currentTarget.className = "snd-btn py-2 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition";
+            if (isRunning) { stopAudio(); startAudio(); }
         }
 
         function startAudio() {
