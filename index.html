@@ -1,206 +1,198 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full antialiased selection:bg-slate-900 selection:text-white">
+<html lang="en" class="h-full bg-[#0D0E12] text-slate-100 antialiased selection:bg-[#D6FF38] selection:text-black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETHEL // Focus Architecture</title>
+    <title>AETHEL // Technical Dark Focus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        paperBg: '#FBF9F5',
-                        paperCard: '#FFFFFF',
-                        paperBorder: 'rgba(30, 27, 22, 0.08)',
-                        charcoal: '#1E1B16',
-                        slateMuted: '#78716C',
-                        emeraldAccent: '#059669',
+                        darkBg: '#0D0E12',
+                        darkCard: '#16181E',
+                        darkCardHover: '#1E212A',
+                        darkBorder: '#262933',
+                        limeAccent: '#D6FF38',
+                        limeGlow: 'rgba(214, 255, 56, 0.15)',
+                        mutedText: '#858B99',
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'SFMono-Regular', 'monospace'],
+                        sans: ['Plus Jakarta Sans', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #FBF9F5;
-            background-image: radial-gradient(rgba(30, 27, 22, 0.06) 1px, transparent 1px);
+            background-color: #0D0E12;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 24px 24px;
         }
-        .paper-shadow { 
-            box-shadow: 0 12px 32px -10px rgba(30, 27, 22, 0.06), 0 0 1px 1px rgba(30, 27, 22, 0.05); 
-        }
-        .ring-glow { filter: drop-shadow(0 10px 20px rgba(5, 150, 105, 0.2)); }
+        .lime-shadow { filter: drop-shadow(0 0 20px rgba(214, 255, 56, 0.25)); }
+        .card-shadow { box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
     </style>
 </head>
-<body class="h-screen w-screen text-charcoal font-sans flex flex-col justify-between overflow-hidden relative p-6 md:p-10 selection:bg-charcoal selection:text-white">
+<body class="min-h-screen w-screen text-slate-100 font-sans flex flex-col justify-between items-center p-4 md:p-8 relative overflow-x-hidden">
 
     <!-- TOP HEADER -->
-    <header class="w-full max-w-6xl mx-auto flex items-center justify-between z-20">
+    <header class="w-full max-w-xl flex items-center justify-between z-20 mb-4">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-charcoal text-paperBg flex items-center justify-center font-bold text-xs shadow-md">
+            <div class="w-8 h-8 rounded-xl bg-limeAccent text-black flex items-center justify-center font-bold text-xs shadow-md">
                 Æ
             </div>
-            <span class="font-bold tracking-tight text-charcoal text-sm">AETHEL</span>
-            <span class="text-[10px] font-mono bg-stone-200/70 text-stone-700 px-2 py-0.5 rounded-full font-semibold">STUDIO</span>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold tracking-tight text-white text-sm">AETHEL</span>
+                    <span class="text-[10px] font-mono text-mutedText">/ v2.4</span>
+                </div>
+                <div class="text-[10px] font-mono text-limeAccent flex items-center gap-1.5 mt-0.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-limeAccent animate-pulse"></span>
+                    <span>STATUS: Locked In</span>
+                </div>
+            </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <!-- TASK DRAWER TOGGLE BUTTON -->
-            <button onclick="toggleDrawer('tasksDrawer')" class="bg-paperCard border border-paperBorder px-3.5 py-2 rounded-xl paper-shadow text-xs font-mono font-medium hover:bg-stone-50 transition flex items-center gap-2">
-                <span>📋</span>
-                <span>TASKS</span>
-                <span id="taskCountBadge" class="bg-emeraldAccent text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
-            </button>
-
-            <!-- ANALYTICS DRAWER TOGGLE BUTTON -->
-            <button onclick="toggleDrawer('analyticsDrawer')" class="bg-paperCard border border-paperBorder px-3.5 py-2 rounded-xl paper-shadow text-xs font-mono font-medium hover:bg-stone-50 transition flex items-center gap-2">
-                <span>📊</span>
-                <span>STATS</span>
-            </button>
-
-            <div class="hidden sm:flex items-center gap-3 text-xs font-mono ml-2">
-                <div class="bg-paperCard border border-paperBorder px-4 py-2 rounded-xl paper-shadow flex items-center gap-2">
-                    <span class="text-slateMuted">YIELD</span>
-                    <span id="userPoints" class="text-charcoal font-bold">1,250 XP</span>
-                </div>
-                <div class="bg-paperCard border border-paperBorder px-4 py-2 rounded-xl paper-shadow flex items-center gap-2">
-                    <span class="text-slateMuted">STREAK</span>
-                    <span class="text-emeraldAccent font-bold">12 DAYS</span>
-                </div>
+        <div class="flex items-center gap-2 font-mono text-xs">
+            <div class="bg-darkCard border border-darkBorder px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <span class="text-limeAccent">🔥</span>
+                <span class="font-bold">14d streak</span>
+            </div>
+            <div class="bg-darkCard border border-darkBorder px-3 py-1.5 rounded-xl text-mutedText">
+                <span id="userXP" class="text-white font-bold">420 XP</span>
             </div>
         </div>
     </header>
 
-    <!-- CENTERPIECE: CIRCULAR CLOCK ENGINE -->
-    <main class="my-auto flex flex-col items-center justify-center relative z-10">
+    <!-- MAIN INTERFACE CONTAINER -->
+    <main class="w-full max-w-xl flex flex-col gap-4 z-10 my-auto">
         
-        <div class="relative flex items-center justify-center cursor-pointer group" onclick="toggleSession()">
-            
-            <!-- SVG RING -->
-            <svg class="w-[340px] h-[340px] md:w-[420px] md:h-[420px] transform -rotate-90 overflow-visible transition-all duration-700" id="svgGauge">
-                <circle cx="50%" cy="50%" r="42%" stroke="#E7E2D9" stroke-width="6" fill="transparent" />
-                <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#059669" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="ring-glow transition-all duration-1000 ease-linear" />
-            </svg>
+        <!-- PROTOCOL BADGE -->
+        <div class="text-center">
+            <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase bg-darkCard border border-darkBorder px-3 py-1 rounded-full">
+                REVISION PROTOCOL // 04
+            </span>
+            <h1 class="text-2xl font-bold tracking-tight text-white mt-2">DEEP SESSION</h1>
+            <p class="text-xs text-mutedText">Pure signal. Zero friction.</p>
+        </div>
 
-            <!-- PERFECTLY CENTERED READOUT -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-                <div id="targetDisplay" class="text-[11px] font-mono tracking-wider text-slateMuted bg-stone-200/60 border border-stone-300/60 px-3.5 py-1 rounded-full uppercase mb-3 max-w-[220px] truncate shadow-sm">
-                    INTENTION IDLE
-                </div>
-                <div id="timeReadout" class="text-6xl md:text-7xl font-mono font-bold tracking-tight text-charcoal">
-                    25:00
-                </div>
-                <div id="statusBadge" class="mt-3 text-[11px] font-mono tracking-widest text-emeraldAccent uppercase flex items-center gap-2 font-semibold">
-                    <span id="statusPulse" class="w-2 h-2 rounded-full bg-emeraldAccent"></span>
-                    <span id="statusText">READY TO ENGAGE</span>
+        <!-- CLOCK HERO DISPLAY -->
+        <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 card-shadow flex flex-col items-center relative overflow-hidden">
+            
+            <div class="relative flex items-center justify-center cursor-pointer my-2" onclick="toggleSession()">
+                <svg class="w-[260px] h-[260px] transform -rotate-90 overflow-visible" id="svgGauge">
+                    <circle cx="50%" cy="50%" r="42%" stroke="#262933" stroke-width="6" fill="transparent" />
+                    <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#D6FF38" stroke-width="8" fill="transparent" stroke-dasharray="1100" stroke-dashoffset="0" stroke-linecap="round" class="lime-shadow transition-all duration-1000 ease-linear" />
+                </svg>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+                    <span class="text-[10px] font-mono tracking-widest text-mutedText uppercase mb-1">● REMAINING</span>
+                    <div id="timeReadout" class="text-5xl font-mono font-bold tracking-tight text-white">
+                        25:00
+                    </div>
+                    <div id="subjectBadge" class="mt-2 text-[11px] font-mono text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-3 py-0.5 rounded-full font-semibold">
+                        ● PHYSICS // PAPER 1
+                    </div>
                 </div>
             </div>
 
+            <!-- TIME SELECTOR PILLS -->
+            <div class="grid grid-cols-4 gap-2 w-full max-w-md mt-4 font-mono text-xs">
+                <button onclick="setMins(15)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">15m</button>
+                <button onclick="setMins(25)" class="dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition shadow-sm">25m</button>
+                <button onclick="setMins(45)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">45m</button>
+                <button onclick="setMins(60)" class="dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition">60m</button>
+            </div>
+
+        </div>
+
+        <!-- ACTIVE MODULE & TOPIC TARGET -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
+            <div class="flex items-center justify-between text-[10px] font-mono text-mutedText mb-1">
+                <span>● ACTIVE MODULE</span>
+                <span class="text-slate-400">PART 2/4 · MECHANICS</span>
+            </div>
+            <input id="primaryTarget" type="text" value="Newtonian Mechanics & Momentum Conservation" class="w-full bg-transparent text-sm font-bold text-white focus:outline-none focus:border-b focus:border-limeAccent pb-1">
+        </div>
+
+        <!-- AUDITORY ENGINE CONTROLS -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow flex flex-col gap-3">
+            <div class="flex items-center justify-between text-[10px] font-mono text-mutedText">
+                <span id="activeSoundLabel">Binaural 16Hz</span>
+                <span class="text-limeAccent">LOW ALPHA FOCUS</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2 font-mono text-xs">
+                <button id="sndOff" onclick="setSound('none', 'Off', 'MUTED')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Off</button>
+                <button id="sndBeta" onclick="setSound('binaural', 'Binaural 16Hz', 'LOW ALPHA FOCUS')" class="snd-btn py-2 rounded-xl bg-slate-800 text-limeAccent font-bold border border-limeAccent/30 transition">16Hz</button>
+                <button id="sndRain" onclick="setSound('rain', 'Rain Ambient', 'ATMOSPHERIC')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Rain</button>
+                <button id="sndPink" onclick="setSound('pink', 'Pink Noise', 'DEEP ISOLATION')" class="snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition">Pink</button>
+            </div>
+        </div>
+
+        <!-- DAILY METRICS DUAL CARD -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
+                <div class="text-[10px] font-mono text-mutedText uppercase">DAILY OUTPUT</div>
+                <div class="text-lg font-bold font-mono text-white mt-1">3.8h <span class="text-xs text-mutedText">/ 4.5h</span></div>
+                <div class="text-[10px] font-mono text-limeAccent mt-1">84% target reached</div>
+            </div>
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 card-shadow">
+                <div class="text-[10px] font-mono text-mutedText uppercase">CONSISTENCY</div>
+                <div class="text-lg font-bold font-mono text-white mt-1">14 <span class="text-xs text-mutedText">Days</span></div>
+                <div class="text-[10px] font-mono text-mutedText mt-1">Top 5% student pace</div>
+            </div>
+        </div>
+
+        <!-- EXECUTION DOCK BAR -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-3 card-shadow flex items-center justify-between">
+            <button onclick="toggleDrawer('tasksDrawer')" class="p-3 text-mutedText hover:text-white transition" title="Focus Tasks">
+                📋
+            </button>
+
+            <!-- MAIN PLAY/PAUSE TRIGGER -->
+            <button id="actionBtn" onclick="toggleSession()" class="w-14 h-14 bg-limeAccent hover:bg-lime-400 text-black rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg shadow-limeAccent/20 transition transform active:scale-95">
+                ▶
+            </button>
+
+            <button onclick="toggleDrawer('analyticsDrawer')" class="p-3 text-mutedText hover:text-white transition" title="Analytics">
+                📊
+            </button>
         </div>
 
     </main>
 
-    <!-- FLOATING DOCK ISLANDS -->
-    <footer class="w-full max-w-4xl mx-auto z-20 flex flex-col md:flex-row items-center justify-between gap-4">
-        
-        <!-- OBJECTIVE INPUT FIELD -->
-        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2.5 w-full md:w-80 paper-shadow flex items-center gap-2">
-            <span class="pl-2 text-stone-400 text-xs">🎯</span>
-            <input id="primaryTarget" type="text" placeholder="State non-negotiable target..." class="w-full bg-transparent text-xs text-charcoal placeholder-stone-400 focus:outline-none font-medium">
+    <!-- DRAWER 1: TASKS -->
+    <aside id="tasksDrawer" class="fixed top-0 left-0 h-full w-80 bg-darkCard border-r border-darkBorder shadow-2xl z-30 transform -translate-x-full transition-transform duration-300 flex flex-col p-6">
+        <div class="flex items-center justify-between pb-4 border-b border-darkBorder">
+            <span class="font-bold text-sm text-white">REVISION TASKS</span>
+            <button onclick="toggleDrawer('tasksDrawer')" class="text-mutedText hover:text-white">✕</button>
         </div>
-
-        <!-- DURATION & ACTION DOCK -->
-        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2 paper-shadow flex items-center gap-3">
-            <div class="flex gap-1 font-mono text-xs">
-                <button onclick="setMins(5)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">05M</button>
-                <button onclick="setMins(15)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">15M</button>
-                <button onclick="setMins(25)" class="dur-btn px-3 py-2 rounded-xl bg-charcoal text-paperBg font-bold transition shadow-sm">25M</button>
-                <button onclick="setMins(45)" class="dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition">45M</button>
-            </div>
-            <div class="h-5 w-[1px] bg-stone-200"></div>
-            <button id="actionBtn" onclick="toggleSession()" class="bg-emeraldAccent hover:bg-emerald-700 text-white font-mono font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md shadow-emeraldAccent/20">
-                INITIATE
-            </button>
-        </div>
-
-        <!-- AUDITORY ENGINE CONTROLS -->
-        <div class="bg-paperCard border border-paperBorder rounded-2xl p-2 paper-shadow flex items-center gap-2 font-mono text-xs">
-            <span class="text-[10px] text-slateMuted pl-2">SOUND:</span>
-            <button id="sndOff" onclick="setSound('none')" class="snd-btn bg-stone-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-stone-200">OFF</button>
-            <button id="sndBeta" onclick="setSound('binaural')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">16Hz BETA</button>
-            <button id="sndPink" onclick="setSound('pink')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">PINK</button>
-            <button id="sndRain" onclick="setSound('rain')" class="snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg">RAIN</button>
-        </div>
-
-    </footer>
-
-    <!-- SLIDE-OVER DRAWER 1: FOCUS TASKS / TO-DO ENGINE -->
-    <aside id="tasksDrawer" class="fixed top-0 left-0 h-full w-80 md:w-96 bg-paperCard border-r border-paperBorder shadow-2xl z-30 transform -translate-x-full transition-transform duration-300 flex flex-col p-6">
-        <div class="flex items-center justify-between pb-4 border-b border-stone-200">
-            <div class="flex items-center gap-2">
-                <span class="font-bold text-sm tracking-tight">FOCUS TASK STACK</span>
-                <span class="text-[10px] font-mono bg-stone-100 px-2 py-0.5 rounded-full text-slateMuted font-semibold">LIVE</span>
-            </div>
-            <button onclick="toggleDrawer('tasksDrawer')" class="text-stone-400 hover:text-charcoal font-bold text-sm">✕</button>
-        </div>
-
-        <!-- TASK INPUT -->
         <div class="mt-4 flex gap-2">
-            <input id="newTaskInput" type="text" placeholder="Add actionable task..." class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 text-xs text-charcoal focus:outline-none focus:border-charcoal font-medium">
-            <button onclick="addTask()" class="bg-charcoal text-paperBg px-4 py-2 rounded-xl font-mono text-xs font-bold hover:bg-black transition">+</button>
+            <input id="newTaskInput" type="text" placeholder="Add revision task..." class="flex-1 bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-limeAccent">
+            <button onclick="addTask()" class="bg-limeAccent text-black px-4 py-2 rounded-xl font-bold text-xs">+</button>
         </div>
-
-        <!-- TASK LIST CONTAINER -->
-        <div id="taskList" class="mt-4 flex-1 overflow-y-auto flex flex-col gap-2 pr-1">
-            <!-- Dynamic Tasks Render Here -->
-        </div>
+        <div id="taskList" class="mt-4 flex-1 overflow-y-auto flex flex-col gap-2"></div>
     </aside>
 
-    <!-- SLIDE-OVER DRAWER 2: FOCUS ANALYTICS & HISTORY -->
-    <aside id="analyticsDrawer" class="fixed top-0 right-0 h-full w-80 md:w-96 bg-paperCard border-l border-paperBorder shadow-2xl z-30 transform translate-x-full transition-transform duration-300 flex flex-col p-6">
-        <div class="flex items-center justify-between pb-4 border-b border-stone-200">
-            <span class="font-bold text-sm tracking-tight">SESSION ANALYTICS</span>
-            <button onclick="toggleDrawer('analyticsDrawer')" class="text-stone-400 hover:text-charcoal font-bold text-sm">✕</button>
+    <!-- DRAWER 2: ANALYTICS -->
+    <aside id="analyticsDrawer" class="fixed top-0 right-0 h-full w-80 bg-darkCard border-l border-darkBorder shadow-2xl z-30 transform translate-x-full transition-transform duration-300 flex flex-col p-6">
+        <div class="flex items-center justify-between pb-4 border-b border-darkBorder">
+            <span class="font-bold text-sm text-white">ANALYTICS SUMMARY</span>
+            <button onclick="toggleDrawer('analyticsDrawer')" class="text-mutedText hover:text-white">✕</button>
         </div>
-
         <div class="mt-6 space-y-4">
-            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
-                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider">Daily Focus Progress</div>
-                <div class="text-2xl font-bold font-mono text-charcoal mt-1">3.5 / 5.0 <span class="text-xs text-slateMuted">HRS</span></div>
-                <div class="w-full bg-stone-200 h-2 rounded-full mt-3 overflow-hidden">
-                    <div class="bg-emeraldAccent h-full rounded-full" style="width: 70%"></div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
-                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider">Deep Focus Index</div>
-                <div class="text-2xl font-bold font-mono text-emeraldAccent mt-1">98.4%</div>
-                <div class="text-[11px] text-slateMuted mt-1">Calculated via continuous session integrity.</div>
-            </div>
-
-            <div class="p-4 bg-stone-50 border border-stone-200 rounded-2xl">
-                <div class="text-[10px] font-mono text-slateMuted uppercase tracking-wider mb-2">Completed Sessions Today</div>
-                <div id="sessionHistory" class="space-y-2 text-xs font-mono">
-                    <div class="flex justify-between items-center text-slateMuted border-b border-stone-200/60 pb-1">
-                        <span>• 25m Biology Revision</span>
-                        <span class="text-emeraldAccent">+250 XP</span>
-                    </div>
-                    <div class="flex justify-between items-center text-slateMuted border-b border-stone-200/60 pb-1">
-                        <span>• 45m UI Architecture</span>
-                        <span class="text-emeraldAccent">+450 XP</span>
-                    </div>
-                </div>
+            <div class="p-4 bg-darkBg border border-darkBorder rounded-2xl">
+                <div class="text-[10px] font-mono text-mutedText">FOCUS EFFICIENCY</div>
+                <div class="text-2xl font-bold font-mono text-limeAccent mt-1">98.4%</div>
             </div>
         </div>
     </aside>
 
-    <!-- JAVASCRIPT ENGINE -->
+    <!-- JS ENGINE -->
     <script>
         let duration = 25 * 60;
         let timeRemaining = duration;
@@ -208,75 +200,51 @@
         let isRunning = false;
         let audioCtx = null;
         let activeNodes = [];
-        let soundMode = 'none';
+        let soundMode = 'binaural';
         let tasks = [];
 
         const timeReadout = document.getElementById('timeReadout');
         const timerProgress = document.getElementById('timerProgress');
-        const statusText = document.getElementById('statusText');
-        const statusPulse = document.getElementById('statusPulse');
         const actionBtn = document.getElementById('actionBtn');
-        const targetDisplay = document.getElementById('targetDisplay');
 
         function toggleDrawer(id) {
-            const drawer = document.getElementById(id);
-            if (id === 'tasksDrawer') {
-                drawer.classList.toggle('-translate-x-full');
-            } else {
-                drawer.classList.toggle('translate-x-full');
-            }
+            document.getElementById(id).classList.toggle(id === 'tasksDrawer' ? '-translate-x-full' : 'translate-x-full');
         }
 
         function setMins(m) {
             if (isRunning) return;
             duration = m * 60;
             timeRemaining = duration;
-            document.querySelectorAll('.dur-btn').forEach(b => b.className = "dur-btn px-3 py-2 rounded-xl text-slateMuted hover:text-charcoal hover:bg-stone-100 transition");
-            event.currentTarget.className = "dur-btn px-3 py-2 rounded-xl bg-charcoal text-paperBg font-bold transition shadow-sm";
+            document.querySelectorAll('.dur-btn').forEach(b => b.className = "dur-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white hover:bg-darkCardHover transition");
+            event.currentTarget.className = "dur-btn py-2 rounded-xl bg-limeAccent text-black font-bold transition shadow-sm";
             updateGauge();
         }
 
-        function setSound(mode) {
+        function setSound(mode, label, sub) {
             soundMode = mode;
-            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn text-slateMuted hover:text-charcoal px-2.5 py-1.5 rounded-lg");
-            event.currentTarget.className = "snd-btn bg-stone-100 text-charcoal font-bold px-2.5 py-1.5 rounded-lg border border-stone-200";
-            if (isRunning) {
-                stopAudio();
-                startAudio();
-            }
+            document.getElementById('activeSoundLabel').innerText = label;
+            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn py-2 rounded-xl border border-darkBorder text-mutedText hover:text-white transition");
+            event.currentTarget.className = "snd-btn py-2 rounded-xl bg-slate-800 text-limeAccent font-bold border border-limeAccent/30 transition";
+            if (isRunning) { stopAudio(); startAudio(); }
         }
 
         function updateGauge() {
             const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
             const s = (timeRemaining % 60).toString().padStart(2, '0');
             timeReadout.innerText = `${m}:${s}`;
-
             const total = 1100;
-            const offset = total - (timeRemaining / duration) * total;
-            timerProgress.style.strokeDashoffset = offset;
+            timerProgress.style.strokeDashoffset = total - (timeRemaining / duration) * total;
         }
 
         function toggleSession() {
-            if (isRunning) {
-                stopSession(false);
-            } else {
-                startSession();
-            }
+            if (isRunning) { stopSession(false); } else { startSession(); }
         }
 
         function startSession() {
-            const target = document.getElementById('primaryTarget').value.trim() || 'DEEP FOCUS SESSION';
-            targetDisplay.innerText = target;
-            
             isRunning = true;
-            actionBtn.innerText = "ABORT";
-            actionBtn.className = "bg-rose-500 hover:bg-rose-600 text-white font-mono font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md shadow-rose-500/20";
-            
-            statusText.innerText = "SESSION ACTIVE";
-            statusPulse.className = "w-2 h-2 rounded-full bg-emeraldAccent animate-ping";
-
+            actionBtn.innerText = "❚❚";
+            actionBtn.className = "w-14 h-14 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg transition transform active:scale-95";
             startAudio();
-
             timer = setInterval(() => {
                 timeRemaining--;
                 updateGauge();
@@ -289,28 +257,16 @@
             timer = null;
             isRunning = false;
             stopAudio();
-
-            actionBtn.innerText = "INITIATE";
-            actionBtn.className = "bg-emeraldAccent hover:bg-emerald-700 text-white font-mono font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-md shadow-emeraldAccent/20";
-            statusText.innerText = "READY TO ENGAGE";
-            statusPulse.className = "w-2 h-2 rounded-full bg-emeraldAccent";
-
-            if (completed) {
-                let current = parseInt(document.getElementById('userPoints').innerText);
-                document.getElementById('userPoints').innerText = (current + (duration / 60) * 10) + ' XP';
-            }
-
+            actionBtn.innerText = "▶";
+            actionBtn.className = "w-14 h-14 bg-limeAccent hover:bg-lime-400 text-black rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg shadow-limeAccent/20 transition transform active:scale-95";
             timeRemaining = duration;
             updateGauge();
         }
 
-        // TASK STACK ENGINE
         function addTask() {
             const input = document.getElementById('newTaskInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            tasks.push({ id: Date.now(), text: text, done: false });
+            if (!input.value.trim()) return;
+            tasks.push({ id: Date.now(), text: input.value.trim(), done: false });
             input.value = '';
             renderTasks();
         }
@@ -320,70 +276,26 @@
             renderTasks();
         }
 
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            renderTasks();
-        }
-
         function renderTasks() {
             const list = document.getElementById('taskList');
             list.innerHTML = '';
-            
-            const pendingTasks = tasks.filter(t => !t.done).length;
-            document.getElementById('taskCountBadge').innerText = pendingTasks;
-
             tasks.forEach(task => {
                 const item = document.createElement('div');
-                item.className = `p-3 rounded-xl border transition flex items-center justify-between gap-2 text-xs font-medium ${task.done ? 'bg-stone-100 border-stone-200 text-stone-400 line-through' : 'bg-stone-50 border-stone-200 text-charcoal'}`;
-                item.innerHTML = `
-                    <div class="flex items-center gap-2 cursor-pointer flex-1" onclick="toggleTask(${task.id})">
-                        <span>${task.done ? '✓' : '○'}</span>
-                        <span class="truncate">${task.text}</span>
-                    </div>
-                    <button onclick="deleteTask(${task.id})" class="text-stone-400 hover:text-red-500 font-bold px-1">✕</button>
-                `;
+                item.className = `p-3 rounded-xl border text-xs flex justify-between items-center ${task.done ? 'bg-darkBg border-darkBorder text-mutedText line-through' : 'bg-darkBg border-darkBorder text-white'}`;
+                item.innerHTML = `<span onclick="toggleTask(${task.id})" class="cursor-pointer flex-1">${task.text}</span>`;
                 list.appendChild(item);
             });
         }
 
-        // AUDIO ENGINE
         function startAudio() {
             if (soundMode === 'none') return;
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
             if (soundMode === 'binaural') {
                 let m = audioCtx.createChannelMerger(2);
-                let o1 = audioCtx.createOscillator(); o1.frequency.value = 400; o1.connect(m, 0, 0);
-                let o2 = audioCtx.createOscillator(); o2.frequency.value = 416; o2.connect(m, 0, 1);
+                let o1 = audioCtx.createOscillator(); o1.frequency.value = 200; o1.connect(m, 0, 0);
+                let o2 = audioCtx.createOscillator(); o2.frequency.value = 216; o2.connect(m, 0, 1);
                 m.connect(audioCtx.destination); o1.start(); o2.start();
                 activeNodes = [o1, o2];
-            } else if (soundMode === 'pink' || soundMode === 'rain') {
-                let bufferSize = audioCtx.sampleRate * 2;
-                let noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                let output = noiseBuffer.getChannelData(0);
-                let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
-                for (let i = 0; i < bufferSize; i++) {
-                    let white = Math.random() * 2 - 1;
-                    b0 = 0.99886 * b0 + white * 0.0555179;
-                    b1 = 0.99332 * b1 + white * 0.0750759;
-                    b2 = 0.96900 * b2 + white * 0.1538520;
-                    b3 = 0.86650 * b3 + white * 0.3104856;
-                    b4 = 0.55000 * b4 + white * 0.5329522;
-                    b5 = -0.7616 * b5 - white * 0.0168980;
-                    output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                    b6 = white * 0.115926;
-                }
-                let whiteNoise = audioCtx.createBufferSource();
-                whiteNoise.buffer = noiseBuffer;
-                whiteNoise.loop = true;
-                
-                let gainNode = audioCtx.createGain();
-                gainNode.gain.value = soundMode === 'rain' ? 0.08 : 0.05;
-                
-                whiteNoise.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                whiteNoise.start();
-                activeNodes = [whiteNoise];
             }
         }
 
@@ -394,7 +306,6 @@
         }
 
         updateGauge();
-        renderTasks();
     </script>
 </body>
 </html>
