@@ -89,7 +89,7 @@
                     </button>
                 </div>
 
-                <!-- POMODORO SUB-STATE INDICATOR (ONLY VISIBLE IN POMO MODE) -->
+                <!-- POMODORO SUB-STATE INDICATOR -->
                 <div id="pomoStateHeader" class="hidden items-center gap-2 mb-4 font-mono text-xs text-limeAccent bg-limeAccent/10 border border-limeAccent/20 px-4 py-1.5 rounded-full font-semibold">
                     <span id="pomoPhaseText">WORK SESSION (1/4)</span>
                 </div>
@@ -97,8 +97,8 @@
                 <!-- LARGE CIRCULAR CLOCK -->
                 <div class="relative flex items-center justify-center my-4 cursor-pointer" onclick="toggleSession()">
                     <svg class="w-[280px] h-[280px] md:w-[320px] md:h-[320px] transform -rotate-90 overflow-visible">
-                        <circle cx="50%" cy="50%" r="42%" stroke="#1A1D26" stroke-width="10" fill="transparent" />
-                        <circle id="timerProgress" cx="50%" cy="50%" r="42%" stroke="#D6FF38" stroke-width="10" fill="transparent" stroke-dasharray="1150" stroke-dashoffset="0" stroke-linecap="round" class="lime-glow transition-all duration-1000 ease-linear" />
+                        <circle cx="50%" cy="50%" r="130" stroke="#1A1D26" stroke-width="10" fill="transparent" />
+                        <circle id="timerProgress" cx="50%" cy="50%" r="130" stroke="#D6FF38" stroke-width="10" fill="transparent" stroke-dasharray="816.8" stroke-dashoffset="0" stroke-linecap="round" class="lime-glow transition-all duration-1000 ease-linear" />
                     </svg>
 
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
@@ -143,43 +143,43 @@
             </div>
         </section>
 
-        <!-- RIGHT COLUMN: TASKS & SOUND ENGINE (5 COLS) -->
+        <!-- RIGHT COLUMN: ENLARGED TASKS & SOUND ENGINE (5 COLS) -->
         <section class="lg:col-span-5 flex flex-col gap-6">
 
-            <!-- TASK MANAGER -->
-            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 md:p-8 card-shadow flex flex-col gap-5">
+            <!-- TASK MANAGER (ENLARGED) -->
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-7 md:p-9 card-shadow flex flex-col gap-6">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xs font-mono font-bold tracking-wider text-mutedText uppercase">TARGET TASK LIST</h2>
-                    <span id="taskCount" class="text-xs font-mono text-limeAccent bg-limeAccent/10 px-2.5 py-1 rounded-md">0 Tasks</span>
+                    <span id="taskCount" class="text-xs font-mono text-limeAccent bg-limeAccent/10 px-3 py-1 rounded-md font-semibold">0 Tasks</span>
                 </div>
 
-                <!-- ADD TASK INPUT -->
-                <div class="flex flex-col gap-2.5">
-                    <input id="newTaskInput" type="text" placeholder="Task description..." class="w-full bg-darkBg border border-darkBorder rounded-xl px-4 py-2.5 text-xs text-white placeholder-mutedText focus:outline-none focus:border-limeAccent">
-                    <div class="flex items-center gap-2.5">
-                        <input id="newTaskTime" type="number" min="1" max="180" placeholder="Mins (e.g. 25)" class="w-32 bg-darkBg border border-darkBorder rounded-xl px-3.5 py-2 text-xs text-white placeholder-mutedText font-mono focus:outline-none focus:border-limeAccent">
-                        <button onclick="addTask()" class="flex-1 bg-white hover:bg-slate-200 text-black font-bold py-2 rounded-xl text-xs font-mono transition">+ ADD TASK</button>
+                <!-- ADD TASK INPUT (ENLARGED UI) -->
+                <div class="flex flex-col gap-3">
+                    <input id="newTaskInput" type="text" placeholder="Task description..." class="w-full bg-darkBg border border-darkBorder rounded-2xl px-5 py-3.5 text-sm text-white placeholder-mutedText focus:outline-none focus:border-limeAccent transition">
+                    <div class="flex items-center gap-3">
+                        <input id="newTaskTime" type="number" min="1" max="180" placeholder="Mins (e.g. 25)" class="w-36 bg-darkBg border border-darkBorder rounded-2xl px-4 py-3 text-xs text-white placeholder-mutedText font-mono focus:outline-none focus:border-limeAccent transition">
+                        <button onclick="addTask()" class="flex-1 bg-white hover:bg-slate-200 text-black font-bold py-3 rounded-2xl text-xs font-mono transition shadow-md">+ ADD TASK</button>
                     </div>
                 </div>
 
-                <!-- TASKS CONTAINER -->
-                <div id="taskList" class="flex flex-col gap-2.5 max-h-[260px] overflow-y-auto pr-1">
+                <!-- TASKS CONTAINER (ENLARGED UI) -->
+                <div id="taskList" class="flex flex-col gap-3 max-h-[280px] overflow-y-auto pr-1">
                     <!-- Tasks inserted dynamically -->
                 </div>
             </div>
 
             <!-- AUDIO ENGINE -->
-            <div class="bg-darkCard border border-darkBorder rounded-3xl p-6 md:p-8 card-shadow flex flex-col gap-4">
+            <div class="bg-darkCard border border-darkBorder rounded-3xl p-7 card-shadow flex flex-col gap-4">
                 <div class="flex items-center justify-between text-xs font-mono">
                     <span class="text-mutedText uppercase font-bold tracking-wider">AUDIO ENGINE</span>
                     <span id="activeSoundLabel" class="text-limeAccent font-bold">16Hz Beta Wave</span>
                 </div>
 
-                <div class="grid grid-cols-4 gap-2 font-mono text-xs mt-1">
-                    <button id="sndBeta" onclick="setSound('binaural', '16Hz Beta Wave')" class="snd-btn py-2.5 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition">16Hz</button>
-                    <button id="sndRain" onclick="setSound('rain', 'Rainfall Ambient')" class="snd-btn py-2.5 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Rain</button>
-                    <button id="sndPink" onclick="setSound('pink', 'Deep Noise')" class="snd-btn py-2.5 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Noise</button>
-                    <button id="sndOff" onclick="setSound('none', 'Audio Muted')" class="snd-btn py-2.5 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Off</button>
+                <div class="grid grid-cols-4 gap-2.5 font-mono text-xs mt-1">
+                    <button id="sndBeta" onclick="setSound('binaural', '16Hz Beta Wave')" class="snd-btn py-3 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition">16Hz</button>
+                    <button id="sndRain" onclick="setSound('rain', 'Rainfall Ambient')" class="snd-btn py-3 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Rain</button>
+                    <button id="sndPink" onclick="setSound('pink', 'Deep Noise')" class="snd-btn py-3 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Noise</button>
+                    <button id="sndOff" onclick="setSound('none', 'Audio Muted')" class="snd-btn py-3 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition">Off</button>
                 </div>
             </div>
 
@@ -243,14 +243,14 @@
 
     <script>
         // TIMER STATE
-        let timerMode = 'standard'; // 'standard' or 'pomodoro'
+        let timerMode = 'standard';
         let duration = 25 * 60;
         let timeRemaining = duration;
         let timer = null;
         let isRunning = false;
         
         // POMODORO STATE
-        let pomoPhase = 'work'; // 'work', 'shortBreak', 'longBreak'
+        let pomoPhase = 'work';
         let workMinsSetting = 25;
         let shortMinsSetting = 5;
         let longMinsSetting = 15;
@@ -271,6 +271,8 @@
         const resetBtn = document.getElementById('resetBtn');
         const statusText = document.getElementById('statusText');
         const statusDot = document.getElementById('statusDot');
+
+        const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 130; // ~816.8px
 
         function switchTimerMode(mode) {
             if (isRunning) return;
@@ -348,8 +350,11 @@
             const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
             const s = (timeRemaining % 60).toString().padStart(2, '0');
             timeReadout.innerText = `${m}:${s}`;
-            const total = 1150;
-            timerProgress.style.strokeDashoffset = total - (timeRemaining / duration) * total;
+            
+            // Dynamic ring countdown animation
+            const fractionRemaining = timeRemaining / duration;
+            const strokeDashoffset = CIRCLE_CIRCUMFERENCE * (1 - fractionRemaining);
+            timerProgress.style.strokeDashoffset = strokeDashoffset;
         }
 
         function toggleSession() {
@@ -491,19 +496,19 @@
 
             tasks.forEach(t => {
                 const card = document.createElement('div');
-                card.className = `p-3 rounded-2xl border ${t.done ? 'bg-darkBg/40 border-darkBorder opacity-50' : 'bg-darkBg border-darkBorder'} flex items-center justify-between gap-3 w-full transition`;
+                card.className = `p-4 rounded-2xl border ${t.done ? 'bg-darkBg/40 border-darkBorder opacity-50' : 'bg-darkBg border-darkBorder'} flex items-center justify-between gap-4 w-full transition`;
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-3 min-w-0 flex-1">
-                        <button onclick="toggleTaskDone(${t.id})" class="w-4 h-4 rounded-md border shrink-0 ${t.done ? 'bg-limeAccent border-limeAccent' : 'border-darkBorder'} flex items-center justify-center text-black font-bold text-[10px]">
+                    <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                        <button onclick="toggleTaskDone(${t.id})" class="w-5 h-5 rounded-lg border shrink-0 ${t.done ? 'bg-limeAccent border-limeAccent' : 'border-darkBorder'} flex items-center justify-center text-black font-bold text-xs">
                             ${t.done ? '✓' : ''}
                         </button>
-                        <span class="text-xs text-white truncate ${t.done ? 'line-through text-mutedText' : ''}">${t.title}</span>
+                        <span class="text-sm font-medium text-white truncate ${t.done ? 'line-through text-mutedText' : ''}">${t.title}</span>
                     </div>
-                    <div class="flex items-center gap-2 font-mono text-[10px] shrink-0">
-                        <span class="text-mutedText">${t.durationMins}m</span>
-                        <button onclick="loadTaskToTimer(${t.durationMins}, '${t.title.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-darkCard border border-darkBorder hover:border-limeAccent/50 text-limeAccent rounded-lg transition font-semibold">Focus</button>
-                        <button onclick="deleteTask(${t.id})" class="text-mutedText hover:text-rose-400 px-1 text-xs">✕</button>
+                    <div class="flex items-center gap-2.5 font-mono text-xs shrink-0">
+                        <span class="text-mutedText font-semibold">${t.durationMins}m</span>
+                        <button onclick="loadTaskToTimer(${t.durationMins}, '${t.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-darkCard border border-darkBorder hover:border-limeAccent/50 text-limeAccent rounded-xl transition font-bold">Focus</button>
+                        <button onclick="deleteTask(${t.id})" class="text-mutedText hover:text-rose-400 px-1.5 text-sm">✕</button>
                     </div>
                 `;
                 list.appendChild(card);
@@ -514,8 +519,8 @@
         function setSound(mode, label) {
             soundMode = mode;
             document.getElementById('activeSoundLabel').innerText = label;
-            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn py-2.5 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition");
-            event.currentTarget.className = "snd-btn py-2.5 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition";
+            document.querySelectorAll('.snd-btn').forEach(b => b.className = "snd-btn py-3 rounded-xl bg-darkBg border border-darkBorder text-mutedText hover:text-white transition");
+            event.currentTarget.className = "snd-btn py-3 rounded-xl bg-darkBg border border-limeAccent/40 text-limeAccent font-bold transition";
             if (isRunning) { stopAudio(); startAudio(); }
         }
 
